@@ -1,0 +1,12 @@
+<div
+  [ngClass]="selected == label ? 
+    'bg-[var(--color-focus)]/25 border-[var(--color-ring)]/35' : 'hover:bg-[var(--color-focus)]/15 border-[var(--color-hidden)] cursor-pointer transition-transform transform active:scale-95'"
+  class="w-full flex items-center gap-3 px-4 py-2 rounded-lg border shadow-md">
+
+  <app-custom-icon *ngIf="icon !== ''" [span]="span" [icon]="icon"></app-custom-icon>
+  <p class="w-full text-base font-medium" [ngClass]="selected == label ? 'cursor-default':''">
+    {{ label }}
+  </p>
+  <app-custom-icon *ngIf="submenu" [span]="span"
+    [icon]="expand ? 'fa-solid fa-angle-up fa-lg' : 'fa-solid fa-angle-down fa-lg'"></app-custom-icon>
+</div>

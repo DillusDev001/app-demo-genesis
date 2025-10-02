@@ -1,1 +1,36 @@
 /* You can add global styles to this file, and also import other style files */
+/* src/styles.css */
+@import "tailwindcss";
+
+@theme {
+
+    --color-text: #5e5f6b;
+
+    --color-red: #d36062;
+
+    --color-hidden: #b8b9c1;
+
+    --color-hidden-dark: #92939e;
+
+    --color-focus: #3494a6;
+    --color-ring: #3494a6;
+
+    --color-focus-light: #f7fcff;
+
+    --color-blue: ##4c83c4;
+    --color-blue-ring: ##4c83c4;
+
+    --color-button-accept: #3494a6;
+    --color-hover-accept: #50b1c0;
+    --color-ring-accept: #A63367;
+    /*#A69A33*/
+
+    --color-button-cancel: #92939e;
+    --color-hover-cancel: #b8b9c1;
+    --color-ring-cancel: #92939e;
+    /*#A69A33*/
+
+
+    --color-whatsapp: #25d366;
+
+}

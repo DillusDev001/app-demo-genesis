@@ -1,0 +1,71 @@
+<div class="relative grid grid-cols-4 gap-4 p-4">
+    <app-custom-input [label]="'Input 1'" [placeholder]="'Texto aquí'" [type]="'password'"
+        [control]="formFormulario.controls.password" [autofocus]="false" [classInput]="'uppercase'" [style]="1"
+        (textChange)="onTextChange($event)" />
+
+    <app-custom-input [label]="'Input 2'" [placeholder]="'Texto aquí'" [type]="'text'"
+        [control]="formFormulario.controls.busqueda" [autofocus]="false" [classInput]="''" [style]="2"
+        (textChange)="onTextChange($event)" />
+
+    <app-custom-button [label]="'Ingresar'" [icon]="'fa-brands fa-facebook-messenger fa-lg'" [type]="'accept'"
+        [class]="''" [valid]="formFormulario.valid" />
+
+    <app-custom-button [label]="'Agregar Usuario'" [icon]="'fa-brands fa-facebook-messenger fa-lg'" [type]="'cancel'"
+        [class]="''" [valid]="true" (click)="agregar()" />
+
+    <app-custom-loading />
+
+    <app-custom-drop-down [label]="'Drop Down'" [placeholder]="'Seleccionar...'"
+        [control]="formFormulario.controls.value" [data]="data" [classSelect]="''" [style]="2"
+        (response)="onResponse($event)" />
+
+    <app-custom-drop-down [label]="'Drop Down'" [placeholder]="'Seleccionar...'"
+        [control]="formFormulario.controls.value" [data]="data" [classSelect]="''" [style]="1"
+        (response)="onResponse($event)" />
+
+    <app-custom-menu-button [label]="'Menú 1'" [selected]="menuSelected" [span]="''"
+        [icon]="'fa-solid fa-street-view fa-lg'" [submenu]="true" [expand]="showSubMenu1"
+        (click)="onClickMenuButton('Menú 1')" />
+
+    <app-custom-menu-button [label]="'Menú 2'" [selected]="menuSelected" [span]="''"
+        [icon]="'fa-solid fa-street-view fa-lg'" [submenu]="true" [expand]="showSubMenu2"
+        (click)="onClickMenuButton('Menú 2')" />
+
+    <app-custom-status-indicator [status]="1" [type]="'estado'" />
+
+    <app-custom-icon [span]="''" [icon]="'fa-solid fa-circle-user fa-2x'" />
+
+    <app-custom-sub-menu-button [label]="'SubMenu 1'" [selected]="subMenuSelected" [span]="''"
+        [icon]="'fa-solid fa-street-view fa-lg'" (click)="onClickSubMenuButton('Menú 1', 'SubMenu 1')" />
+
+    <app-custom-sub-menu-button [label]="'SubMenu 2'" [selected]="subMenuSelected" [span]="''"
+        [icon]="'fa-solid fa-street-view fa-lg'" (click)="onClickSubMenuButton('Menú 2', 'SubMenu 2')" />
+
+    <div class="w-full h-max flex flex-wrap border-b border-[var(--color-hidden)] gap-2">
+        <app-custom-tab-button [label]="'Tab 1'" [selected]="tabSelected" [icon]="'fa-solid fa-cloud fa-lg'" [span]="''"
+            (click)="onClickTab('Tab 1')" />
+        <app-custom-tab-button [label]="'Tab 2'" [selected]="tabSelected" [icon]="'fa-solid fa-cloud fa-lg'" [span]="''"
+            (click)="onClickTab('Tab 2')" />
+        <app-custom-tab-button [label]="'Tab 3'" [selected]="tabSelected" [icon]="'fa-solid fa-cloud fa-lg'" [span]="''"
+            (click)="onClickTab('Tab 3')" />
+
+        <app-custom-text-area [label]="'Input 1'" [placeholder]="'Texto aquí'" [control]="formFormulario.controls.area"
+            [autofocus]="false" [classInput]="'uppercase'" [style]="2" [rows]="5" (textChange)="onTextChange($event)" />
+
+        <app-custom-check-box class="w-max h-max" [label]="'Check Box'" [control]="formFormulario.controls.check" />
+
+        <app-custom-dot-menu class="w-max h-max" [data]="dataDotMenu" (response)="onResponse($event)" />
+
+        <app-custom-button [label]="'Mostrar Modal'" [icon]="''" [type]="'cancel'" [valid]="true"
+            (click)="onClick('alert')" />
+
+        <app-custom-button [label]="'Mostrar Modal'" [icon]="''" [type]="'cancel'" [valid]="true"
+            (click)="onClick('warning', 'Eliminar')" />
+
+        <app-custom-button [label]="'Mostrar Modal'" [icon]="''" [type]="'cancel'" [valid]="true"
+            (click)="onClick('info')" />
+
+        <app-custom-button [label]="'Mostrar Notification'" [icon]="''" [type]="'accept'" [valid]="true"
+            (click)="onClickNotification('success', 'Notification de Junior XD XD XD XD XD XD XD XD XD')" />
+    </div>
+</div>

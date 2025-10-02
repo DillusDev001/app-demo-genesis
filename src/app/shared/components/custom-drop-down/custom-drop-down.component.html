@@ -1,0 +1,27 @@
+<div class="w-full h-max flex"
+  [ngClass]="{'flex-col gap-1 justify-center' : style === 1, 'flex-row gap-2 items-center' : style === 2}">
+  <label *ngIf="label !== ''" class="font-semibold" [ngClass]="[
+    (isFocused) ? 'text-[var(--color-focus)]' : '',
+    (!control.touched && !isFocused) ? 'text-[var(--color-text)]' : '',
+    (control.touched && !control.valid && !isFocused) ? 'text-[var(--color-red)]' : '',
+    (control.touched && !control.valid && isFocused) ? 'text-[var(--color-red)]' : '',
+    (control.touched && control.valid && isFocused) ? 'text-[var(--color-focus)]' : '',
+  ]">
+    {{ label }}
+  </label>
+  <select [formControl]="control" [class]="classSelect" (focus)="onFocus()" (blur)="onBlur()" [ngClass]="[
+      classSelect,
+      (isFocused) ? 'text-[var(--color-focus)] border-[var(--color-focus)] border-2' : '',
+      (!control.touched && !isFocused && !control.value) ? 'text-[var(--color-hidden)] border-[var(--color-text)]' : '',
+      (control.touched && !control.valid && !isFocused) ? 'text-[var(--color-red)] border-[var(--color-red)]' : '',
+      (control.touched && !control.valid && isFocused) ? 'text-[var(--color-red)] border-[var(--color-red)] border-2' : '',
+      (control.touched && control.valid && isFocused) ? 'text-[var(--color-focus)] border-[var(--color-focus)] border-2' : '',
+    ]" (change)="onValueChange($event)"
+    class="w-full h-11 px-4 bg-white border rounded-lg outline-none placeholder-gray-300"
+    [ngClass]="{'flex-1' : style === 2}">
+
+    <option class="" value="" selected>{{ placeholder }}...</option>
+    <option *ngFor="let item of data" [value]="item.value">{{ item.data }}</option>
+
+  </select>
+</div>

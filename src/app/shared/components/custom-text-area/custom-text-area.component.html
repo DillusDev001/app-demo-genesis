@@ -1,0 +1,27 @@
+<div class="w-full h-max flex" [ngClass]="{'flex-col gap-1 justify-center' : style === 1, 'flex-row gap-2 items-start' : style === 2}">
+  <label *ngIf="label !== ''" class="font-semibold"
+  [ngClass]="[
+    (isFocused) ? 'text-[var(--color-focus)]' : '',
+    (!control.touched && !isFocused) ? 'text-[var(--color-text)]' : '',
+    (control.touched && !control.valid && !isFocused) ? 'text-[var(--color-red)]' : '',
+    (control.touched && !control.valid && isFocused) ? 'text-[var(--color-red)]' : '',
+    (control.touched && control.valid && isFocused) ? 'text-[var(--color-focus)]' : '',
+    style === 2 ? 'pt-2.5' : ''
+  ]">
+    {{ label }}
+  </label>
+
+  <div class="flex flex-row gap-2 w-full flex-1 bg-white border rounded-lg overflow-hidden pr-2"
+    [ngClass]="[
+      (isFocused) ? 'text-[var(--color-text)] border-[var(--color-focus)] border-2' : '',
+      (!control.touched && !isFocused) ? 'text-[var(--color-text)] border-[var(--color-text)]' : '',
+      (control.touched && !control.valid && !isFocused) ? 'text-[var(--color-red)] border-[var(--color-red)]' : '',
+      (control.touched && !control.valid && isFocused) ? 'text-[var(--color-red)] border-[var(--color-red)] border-2' : '',
+      (control.touched && control.valid && isFocused) ? 'text-[var(--color-focus)] border-[var(--color-focus)] border-2' : '',
+    ]">
+    <textarea #inputElement attr.list="{{ id }}" (focus)="onFocus()" (blur)="onBlur()" [placeholder]="placeholder" [ngClass]="classInput"
+        class="w-full bg-white outline-none p-2.5 placeholder:text-[var(--color-hidden)] resize-none"
+        [formControl]="control" [attr.autofocus]="autofocus ? true : null" (input)="textChange.emit(control.value)" [rows]="rows">
+    </textarea>
+  </div>  
+</div>

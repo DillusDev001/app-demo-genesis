@@ -1,0 +1,20 @@
+<div class="relative" (mouseenter)="!isTouchDevice && onMouseEnter()" (mouseleave)="!isTouchDevice && onMouseLeave()"
+  (click)="isTouchDevice && handleMobileTap()">
+  <app-custom-icon [icon]="'fa-solid fa-ellipsis-vertical fa-lg'" [span]="'cursor-pointer'"></app-custom-icon>
+
+  <!-- Dropdown -->
+  <div *ngIf="isDropdownOpen"
+    class="absolute right-0 w-max bg-white border rounded shadow-lg z-10 text-sm font-normal overflow-hidden" [ngStyle]="{
+        'top': dropdownPosition.top,
+        'bottom': dropdownPosition.bottom
+      }">
+    <ul>
+      <li *ngFor="let item of data; index as i">
+        <button class="block px-4 py-2 w-full text-left hover:bg-gray-200 active:bg-gray-300"
+          (click)="onClickItemMenu(i); $event.stopPropagation()">
+          {{item.data}}
+        </button>
+      </li>
+    </ul>
+  </div>
+</div>

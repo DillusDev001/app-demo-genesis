@@ -1,0 +1,54 @@
+<div *ngIf="style < 3" class="w-full h-max flex"
+  [ngClass]="{'flex-col gap-1 justify-center' : style === 1, 'flex-row gap-2 items-center' : style === 2}">
+  <label *ngIf="label !== ''" class="font-semibold" [ngClass]="[
+    (isFocused) ? 'text-[var(--color-focus)]' : '',
+    (!control.touched && !isFocused) ? 'text-[var(--color-text)]' : '',
+    (control.touched && !control.valid && !isFocused) ? 'text-[var(--color-red)]' : '',
+    (control.touched && !control.valid && isFocused) ? 'text-[var(--color-red)]' : '',
+    (control.touched && control.valid && isFocused) ? 'text-[var(--color-focus)]' : '',
+  ]">
+    {{ label }}
+  </label>
+
+  <div class="flex flex-row gap-2 w-full flex-1 bg-white border rounded-lg overflow-hidden items-center" [ngClass]="[
+      (isFocused) ? 'text-[var(--color-text)] border-[var(--color-focus)] border-2' : '',
+      (!control.touched && !isFocused) ? 'text-[var(--color-text)] border-[var(--color-text)]' : '',
+      (control.touched && !control.valid && !isFocused) ? 'text-[var(--color-red)] border-[var(--color-red)]' : '',
+      (control.touched && !control.valid && isFocused) ? 'text-[var(--color-red)] border-[var(--color-red)] border-2' : '',
+      (control.touched && control.valid && isFocused) ? 'text-[var(--color-focus)] border-[var(--color-focus)] border-2' : '',
+    ]">
+    <input #innerElement attr.list="{{ id }}" (focus)="onFocus()" (blur)="onBlur()" [placeholder]="placeholder"
+      class="w-full h-10 bg-white outline-none p-2.5 placeholder:text-[var(--color-hidden)]" [type]="type"
+      [class]="classInput" [formControl]="control" [attr.autofocus]="autofocus ? true : null"
+      (input)="textChange.emit(control.value)" (keydown)="inputKeyPress($event)" />
+    <span *ngIf="isPassword" class="p-1 cursor-pointer mr-2">
+      <i [class]="iconPassword" [ngClass]="{
+          'text-[var(--color-focus)]' : (isFocused && (control.valid || !control.valid) && (control.touched || !control.touched)),
+          'text-[var(--color-red)]' : (control.touched && !control.valid && isFocused),
+        }" (click)="showOrHiddenPassword()"></i>
+    </span>
+  </div>
+</div>
+
+<div *ngIf="style === 3" class="grid grid-cols-2 items-center border rounded-lg px-4 py-0.5 bg-[var(--color-focus)]/15" [ngClass]="[
+      (isFocused) ? 'text-[var(--color-text)] border-[var(--color-focus)] border-2' : '',
+      (!control.touched && !isFocused) ? 'text-[var(--color-text)] border-[var(--color-text)]' : '',
+      (control.touched && !control.valid && !isFocused) ? 'text-[var(--color-red)] border-[var(--color-red)]' : '',
+      (control.touched && !control.valid && isFocused) ? 'text-[var(--color-red)] border-[var(--color-red)] border-2' : '',
+      (control.touched && control.valid && isFocused) ? 'text-[var(--color-focus)] border-[var(--color-focus)] border-2' : '',
+    ]">
+  <label *ngIf="label !== ''" class="font-semibold text-right " [ngClass]="[
+    (isFocused) ? 'text-[var(--color-focus)]' : '',
+    (!control.touched && !isFocused) ? 'text-[var(--color-text)]' : '',
+    (control.touched && !control.valid && !isFocused) ? 'text-[var(--color-red)]' : '',
+    (control.touched && !control.valid && isFocused) ? 'text-[var(--color-red)]' : '',
+    (control.touched && control.valid && isFocused) ? 'text-[var(--color-focus)]' : '',
+  ]">
+    {{ label }}
+  </label>
+
+  <input #innerElement attr.list="{{ id }}" (focus)="onFocus()" (blur)="onBlur()" [placeholder]="placeholder"
+    class=" text-right outline-none  placeholder:text-[var(--color-hidden)]" [type]="type" [class]="classInput"
+    [formControl]="control" [attr.autofocus]="autofocus ? true : null" (input)="textChange.emit(control.value)"
+    (keydown)="inputKeyPress($event)" />
+</div>

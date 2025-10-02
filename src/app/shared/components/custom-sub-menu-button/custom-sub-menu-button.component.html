@@ -1,0 +1,9 @@
+<div [ngClass]="selected == label ? 
+    'bg-[var(--color-focus)]/25 border-[var(--color-ring)]/35' : 'hover:bg-[var(--color-focus)]/15 border-[var(--color-hidden)]'"
+  class="w-full flex items-center gap-3 px-4 py-2 rounded-lg transition-transform transform active:scale-95 cursor-pointer border shadow-md">
+
+  <app-custom-icon *ngIf="icon !== ''" [span]="span" [icon]="icon"></app-custom-icon>
+  <p class="w-full text-base font-medium cursor-pointer">
+    {{ label }}
+  </p>
+</div>

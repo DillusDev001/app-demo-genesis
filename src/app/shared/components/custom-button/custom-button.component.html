@@ -1,0 +1,16 @@
+<button #innerButton type="button" 
+  [ngClass]="{
+    'bg-[var(--color-button-accept)] hover:bg-[var(--color-hover-accept)]': type === 'accept',
+    'bg-[var(--color-button-cancel)] hover:bg-[var(--color-hover-cancel)]': type === 'cancel',
+    'focus:ring-[var(--color-focus)]': type === 'accept',
+    'focus:ring-[var(--color-ring-cancel)]': type === 'cancel',
+    'cursor-pointer': valid,
+    'cursor-not-allowed': !valid,
+  }"
+  class="w-full h-11 border-2 border-white text-white px-6 outline-none rounded-lg transition-transform transform active:scale-95 focus:ring-2"
+  [class]="class">
+  <span *ngIf="icon != ''" class="p-1 text-white">
+    <i [class]="icon"></i>
+  </span>
+  {{ label }}
+</button>
