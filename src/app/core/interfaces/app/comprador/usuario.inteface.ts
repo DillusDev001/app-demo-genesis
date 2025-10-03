@@ -1,4 +1,5 @@
-import { Producto } from "../../vendedor/utils/vendedor.interface";
+
+import { Producto } from "../vendedor/vendedor.interface";
 import { Pago } from "./pago.interface";
 
 export interface Usuario {
