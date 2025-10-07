@@ -1,0 +1,72 @@
+<div class="flex flex-col gap-4 p-4 bg-white h-full">
+  <!-- Header -->
+  <div class="flex justify-between items-center">
+    <h1 class="text-3xl font-bold">Productos</h1>
+    <button (click)="irAFormularioProducto()" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold flex items-center gap-2 cursor-pointer">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
+      </svg>
+      Agregar producto
+    </button>
+  </div>
+
+  <!-- Search -->
+  <div class="relative">
+    <input type="text" placeholder="Buscar productos" class="w-full p-2 pl-10 border rounded-lg">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+      <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+    </svg>
+  </div>
+
+  <!-- Products Table -->
+  <div class="overflow-x-auto">
+    <table class="min-w-full bg-white">
+      <thead>
+        <tr class="w-full h-16 border-gray-300 border-b py-8">
+          <th class="text-left pl-4">PRODUCTO</th>
+          <th class="text-left">PRECIO</th>
+          <th class="text-left">INVENTARIO</th>
+          <th class="text-left">ESTADO</th>
+          <th class="text-left"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let producto of dataProductos" class="border-b">
+            <td class="p-4 flex items-center gap-4">
+              <img [src]="producto.imagenDestacada || 'assets/img/logo-login.png'" alt="{{ producto.nombre }}" class="w-12 h-12 object-cover rounded-md bg-gray-100">
+              <div>
+                <div class="font-medium">{{ producto.nombre }}</div>
+                <div class="text-sm text-gray-500">{{ producto.categoria }}</div>
+              </div>
+            </td>
+            <td>{{ producto.precio | currency:'Bs.':'symbol':'1.2-2' }}</td>
+            <td>
+              <ng-container *ngIf="producto.tipo === 'producto' && producto.stock !== undefined">
+                {{ producto.stock }} en stock
+              </ng-container>
+              <ng-container *ngIf="producto.tipo === 'servicio'">
+                N/A
+              </ng-container>
+            </td>
+            <td>
+              <span *ngIf="!producto.activo" class="bg-gray-200 text-gray-800 py-1 px-3 rounded-full text-xs font-semibold">Inactivo</span>
+              <ng-container *ngIf="producto.activo">
+                <span *ngIf="producto.tipo === 'servicio'" class="bg-blue-200 text-blue-800 py-1 px-3 rounded-full text-xs font-semibold">Servicio</span>
+                <span *ngIf="producto.tipo === 'producto' && producto.stock !== undefined && producto.stock > 10" class="bg-green-200 text-green-800 py-1 px-3 rounded-full text-xs font-semibold">Activo</span>
+                <span *ngIf="producto.tipo === 'producto' && producto.stock !== undefined && producto.stock > 0 && producto.stock <= 10" class="bg-yellow-200 text-yellow-800 py-1 px-3 rounded-full text-xs font-semibold">Bajo stock</span>
+                <span *ngIf="producto.tipo === 'producto' && (producto.stock === undefined || producto.stock === 0)" class="bg-red-200 text-red-800 py-1 px-3 rounded-full text-xs font-semibold">Agotado</span>
+              </ng-container>
+            </td>
+            <td><a href="#" class="text-blue-600 hover:underline cursor-pointer">Editar</a></td>
+          </tr>
+        
+          <tr *ngIf="dataProductos.length === 0">
+            <td colspan="5" class="text-center py-12">
+              <p class="text-gray-500">Aún no tienes productos en tu tienda.</p>
+              <p class="text-sm text-gray-400 mt-1">¡Haz clic en "Agregar producto" para empezar a vender!</p>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

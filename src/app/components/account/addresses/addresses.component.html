@@ -1,0 +1,52 @@
+<div class="bg-white border border-gray-200 p-8 rounded-lg shadow-lg h-full">
+
+  <!-- Encabezado -->
+  <div class="flex justify-between items-center mb-6">
+    <div>
+      <h1 class="text-2xl sm:text-3xl font-bold">Direcciones de Envío</h1>
+      <p class="text-gray-500 mt-1">Añade, edita o elimina tus direcciones.</p>
+    </div>
+    <button (click)="openAddressModal()" class="inline-flex items-center justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-300">
+      <i class="fa-solid fa-plus mr-2"></i>
+      Añadir Dirección
+    </button>
+  </div>
+
+  <!-- Estado de Carga -->
+  <div *ngIf="isLoading" class="space-y-4 animate-pulse">
+    <div *ngFor="let i of [1, 2]" class="p-4 border border-gray-200 rounded-lg flex justify-between items-center">
+      <div class="w-3/4">
+        <div class="h-4 bg-gray-300 rounded w-1/2 mb-2"></div>
+        <div class="h-4 bg-gray-300 rounded w-3/4"></div>
+      </div>
+      <div class="h-8 bg-gray-300 rounded w-16"></div>
+    </div>
+  </div>
+
+  <!-- Contenido Principal -->
+  <div *ngIf="!isLoading">
+    <!-- Estado Vacío -->
+    <div *ngIf="direcciones.length === 0" class="text-center py-12 border-2 border-dashed border-gray-300 rounded-lg">
+      <i class="fa-solid fa-map-location-dot text-4xl text-gray-400"></i>
+      <p class="text-gray-500 mt-4 font-semibold">No tienes direcciones guardadas.</p>
+      <p class="text-gray-400 text-sm">¡Añade tu primera dirección para empezar!</p>
+    </div>
+
+    <!-- Lista de Direcciones -->
+    <div *ngIf="direcciones.length > 0" class="space-y-4">
+      <div *ngFor="let direccion of direcciones" class="p-4 border border-gray-200 rounded-lg flex flex-col sm:flex-row justify-between sm:items-center hover:shadow-md transition-shadow duration-300">
+        <div>
+          <p class="font-semibold text-gray-800">{{ direccion.calle }}</p>
+          <p class="text-sm text-gray-600">{{ direccion.ciudad }}, {{ direccion.departamento }}</p>
+          <p class="text-sm text-gray-500">{{ direccion.pais }} - {{ direccion.codigoPostal }}</p>
+        </div>
+        <div class="mt-4 sm:mt-0 flex gap-2">
+          <button (click)="openAddressModal(direccion)" class="text-blue-600 hover:text-blue-800 font-medium transition-colors duration-300">Editar</button>
+          <!-- ¡Funcionalidad añadida! Implementaremos deleteAddress a continuación -->
+          <button (click)="deleteAddress(direccion.idDireccion)" class="text-red-600 hover:text-red-800 font-medium transition-colors duration-300">Eliminar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

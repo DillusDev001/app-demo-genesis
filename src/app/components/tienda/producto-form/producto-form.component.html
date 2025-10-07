@@ -1,0 +1,184 @@
+<div class="container mx-auto p-8">
+  <h1 class="text-2xl font-bold mb-6">Agregar Producto</h1>
+
+  <form [formGroup]="productoForm" (ngSubmit)="guardarProducto()">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div class="md:col-span-2">
+        <!-- Sección de detalles del producto -->
+        <div class="bg-white p-6 rounded-lg shadow-md">
+          <div class="mb-4">
+            <label for="product-name" class="block text-sm font-medium text-gray-700 mb-1">Nombre del Producto</label>
+            <input type="text" id="product-name" formControlName="nombre"
+              class="h-10 w-full rounded px-4 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+              placeholder="Ej: Camiseta de algodón orgánico">
+          </div>
+
+          <div class="mb-4">
+            <label for="product-description" class="block text-sm font-medium text-gray-700 mb-1">Descripción</label>
+            <textarea id="product-description" rows="4" formControlName="descripcion"
+              class="w-full rounded px-4 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+              placeholder="Describe tu producto con detalles relevantes..."></textarea>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div>
+              <label for="product-price" class="block text-sm font-medium text-gray-700 mb-1">Precio (Bs.)</label>
+              <input type="number" id="product-price" formControlName="precio"
+                class="h-10 w-full rounded px-4 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                placeholder="50.00">
+            </div>
+            <div>
+              <label for="product-stock" class="block text-sm font-medium text-gray-700 mb-1">Stock (Opcional)</label>
+              <input type="number" id="product-stock" formControlName="stock"
+                class="h-10 w-full rounded px-4 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                placeholder="100">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div>
+              <label for="product-category" class="block text-sm font-medium text-gray-700 mb-1">Categoría</label>
+              <select id="product-category" formControlName="categoria" (change)="onCategoryChange($event)"
+                class="h-10 w-full rounded px-4 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                <option value="">Selecciona una categoría</option>
+                <option *ngFor="let categoria of categorias" [value]="categoria.nombre">{{ categoria.nombre }}</option>
+              </select>
+            </div>
+            <div>
+              <label for="product-subcategory" class="block text-sm font-medium text-gray-700 mb-1">Subcategoría
+                (Opcional)</label>
+              <select id="product-subcategory" formControlName="subCategoria"
+                class="h-10 w-full rounded px-4 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                <option value="">Selecciona una subcategoría</option>
+                <option *ngFor="let sub of subCategorias" [value]="sub">{{ sub }}</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <span class="block text-sm font-medium text-gray-700 mb-2">Tipo</span>
+            <div class="flex gap-4">
+              <label class="flex items-center p-3 border border-blue-500 bg-blue-50 rounded-md cursor-pointer flex-1">
+                <input type="radio" name="product-type" value="producto" formControlName="tipo"
+                  class="h-4 w-4 text-blue-600 border-gray-300" checked>
+                <span class="ml-3 text-sm font-medium text-blue-800">Producto</span>
+              </label>
+              <label class="flex items-center p-3 border border-gray-300 rounded-md cursor-pointer flex-1">
+                <input type="radio" name="product-type" value="servicio" formControlName="tipo"
+                  class="h-4 w-4 text-blue-600 border-gray-300">
+                <span class="ml-3 text-sm font-medium text-gray-700">Servicio</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sección de Imágenes -->
+        <div class="bg-white p-6 rounded-lg shadow-md mt-8">
+          <h2 class="text-lg font-semibold mb-4">Imágenes</h2>
+
+          <!-- Imagen Destacada -->
+          <div class="mb-6">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Imagen Destacada</label>
+            <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+              <div class="space-y-1 text-center">
+                <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48"
+                  aria-hidden="true">
+                  <path
+                    d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                <div class="flex text-sm text-gray-600">
+                  <label for="file-upload"
+                    class="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none">
+                    <span (click)="inputFile.click()">Click para subir</span>
+                    <input #inputFile hidden type="file" (change)="onImagenDestacadaSelected($event)">
+                  </label>
+                  <p class="pl-1">o arrastra y suelta</p>
+                </div>
+                <p class="text-xs text-gray-500">SVG, PNG, JPG (MAX. 800x400px)</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Lista de Imagenes -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Galería de Imágenes</label>
+            <div class="grid grid-cols-4 gap-4">
+              <div
+                class="flex items-center justify-center w-24 h-24 bg-gray-100 rounded-lg cursor-pointer hover:bg-gray-200">
+                <span class="text-3xl text-gray-400">+</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Columna derecha -->
+      <div>
+        <!-- Atributos del producto -->
+        <div class="bg-white p-6 rounded-lg shadow-md mb-8">
+          <h2 class="text-lg font-semibold mb-4">Atributos del Producto</h2>
+          <div class="space-y-4">
+            <div class="flex items-center gap-2">
+              <input type="text" placeholder="Ej: Talla"
+                class="h-10 w-full rounded px-4 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+              <input type="text" placeholder="Ej: S, M, L"
+                class="h-10 w-full rounded px-4 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+              <button class="text-gray-500 hover:text-red-500">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                  stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+              </button>
+            </div>
+            <div class="flex items-center gap-2">
+              <input type="text" placeholder="Ej: Color"
+                class="h-10 w-full rounded px-4 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+              <input type="text" placeholder="Ej: Rojo, Azul, Verde"
+                class="h-10 w-full rounded px-4 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+              <button class="text-gray-500 hover:text-red-500">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                  stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+              </button>
+            </div>
+          </div>
+          <button class="mt-4 text-sm text-blue-600 hover:text-blue-800 font-medium flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            Añadir otro atributo
+          </button>
+        </div>
+
+        <!-- Activar producto -->
+        <div class="bg-white p-6 rounded-lg shadow-md">
+          <div class="flex items-center justify-between">
+            <span class="text-sm font-medium text-gray-900">Activar producto</span>
+            <label for="toggle-switch" class="flex items-center cursor-pointer">
+              <div class="relative">
+                <input type="checkbox" id="toggle-switch" class="sr-only" formControlName="activo">
+                <div class="block bg-gray-200 w-14 h-8 rounded-full"></div>
+                <div class="dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition"></div>
+              </div>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Acciones -->
+    <div class="flex justify-end gap-4 mt-8">
+      <button type="button"
+        class="px-6 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">Cancelar</button>
+      <button type="submit"
+        class="px-6 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700">Guardar
+        Producto</button>
+    </div>
+  </form>
+</div>

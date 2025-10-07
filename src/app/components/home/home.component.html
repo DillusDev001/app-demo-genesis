@@ -1,0 +1,39 @@
+<div class="bg-background text-text">
+  <div class="h-max">
+    <section class="relative h-[50vh] bg-cover bg-center bg-no-repeat lg:h-[70vh]"
+      [style.background-image]="heroImageStyle">
+      <div class="w-full h-full flex items-center justify-center bg-gradient-to-t from-black/80 to-black/20 text-white">
+        <div class="w-[60vw] h-max flex flex-col items-center text-center gap-4">
+          <h1 class="text-4xl font-black md:text-6xl">Descubre productos únicos de emprendedores bolivianos</h1>
+          <p class="max-w-2xl text-lg text-slate-200">Apoya a los negocios locales y encuentra tesoros escondidos en
+            nuestra comunidad.</p>
+          <button
+            class="h-12 rounded-lg bg-primary px-8 text-base font-bold text-white shadow-lg transition-transform hover:scale-105">Explorar</button>
+        </div>
+      </div>
+    </section>
+
+    <div class="flex flex-col gap-12 p-8">
+      <div class="flex flex-col gap-2">
+        <i routerLink="/categoria" class="text-2xl font-bold cursor-pointer">Categorías</i>
+        <div *ngIf="isLoadingCategories" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+          <app-skeleton-card *ngFor="let i of [1, 2, 3, 4, 5, 6]"></app-skeleton-card>
+        </div>
+        <div *ngIf="!isLoadingCategories" class="grid grid-cols-2 md:grid-cols-4 6 gap-12">
+          <app-category-card *ngFor="let categoria of dataCategorias" [category]="categoria"></app-category-card>
+        </div>
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <p class="text-2xl font-bold">Productos Destacados</p>
+        <div *ngIf="isLoadingProducts" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+          <app-skeleton-card *ngFor="let i of [1, 2, 3, 4, 5]"></app-skeleton-card>
+        </div>
+        <div *ngIf="!isLoadingProducts" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
+          <app-product-card *ngFor="let producto of dataProductos" [producto]="producto"
+            (addToCart)="agregarAlCarrito($event)"></app-product-card>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,68 @@
+<div *ngIf="producto" class="p-6 bg-white rounded-lg shadow-lg max-w-4xl mx-auto font-sans">
+  <div class="grid grid-cols-2 w-full gap-8">
+    <!-- Image Gallery -->
+    <div>
+      <div class="w-full bg-gray-200 rounded-lg flex items-center justify-center mb-4" style="height: 400px;">
+        <img [src]="selectedImage" alt="Product Image" class="max-w-full max-h-full object-contain rounded-lg">
+      </div>
+      <div *ngIf="producto.imagenes" class="flex space-x-2">
+        <div *ngFor="let imagen of producto.imagenes" class="w-20 h-20 bg-gray-200 rounded-md flex items-center justify-center cursor-pointer border-2 hover:border-blue-500" [class.border-blue-500]="imagen === selectedImage" (click)="selectImage(imagen)">
+           <img [src]="imagen" alt="Thumbnail" class="max-w-full max-h-full object-contain rounded-sm">
+        </div>
+      </div>
+    </div>
+
+    <!-- Product Details -->
+    <div class="flex flex-col gap-2">
+      <div class="flex justify-between items-center2">
+        <span class="text-sm text-gray-500">{{ producto.categoria }} <span *ngIf="producto.subCategoria">/ {{ producto.subCategoria }}</span></span>
+        <div class="flex items-center text-sm text-gray-600">
+          <i class="fas fa-star text-yellow-500 mr-1"></i>
+          <!-- TODO: Obtener el número de puntuacion -->
+          <span class="font-bold">{{ producto.puntuacion?.toFixed(1) }}</span>
+          <!-- TODO: Obtener el número de reseñas -->
+          <span class="ml-1">({{ producto.resenias }} reseñas)</span>
+        </div>
+      </div>
+      
+      <h1 class="text-3xl font-bold text-gray-800">{{ producto.nombre }}</h1>
+      
+      <span class="inline-block w-max bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-1 rounded-full">
+        {{ producto.tipo }}
+      </span>
+
+      <p class="text-gray-600">{{ producto.descripcion }}</p>
+
+      <p class="text-4xl font-bold text-gray-900">Bs. {{ producto.precio.toFixed(2) }}</p>
+      
+      <p class="text-sm text-green-600 font-semibold">En Stock ({{ producto.stock }} unidades)</p>
+
+      <!-- TODO: Atributos -->
+      <div *ngIf="producto.atributos && producto.atributos.length > 0" class="grow">
+        <h3 class="text-md font-semibold text-gray-800">Atributos</h3>
+        <hr class="border-t border-gray-500 mt-0.5 mb-2">
+        <div class="flex flex-col gap-1 text-sm text-gray-700">
+          <ng-container *ngFor="let atributo of producto.atributos">
+            <div class="flex justify-between">
+              <span class="font-semibold">{{ atributo.nombre | titlecase }}</span>
+              <span>{{ atributo.valor }}</span>
+            </div>
+            <hr class="border-t border-gray-300 my-0.5">
+          </ng-container>
+        </div>
+      </div>
+
+      <!-- TODO: Botones -->
+      <div class="flex items-center space-x-4">
+        <div class="flex items-center border border-gray-300 rounded-md">
+          <button (click)="updateQuantity(-1)" class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-l-md transition-colors">-</button>
+          <input disabled="" type="text" [(ngModel)]="quantity" class="w-16 text-center focus:ring-0 focus:border-gray-300">
+          <button (click)="updateQuantity(1)" class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-r-md transition-colors">+</button>
+        </div>
+        <button (click)="agregarAlCarrito()" class="flex-1 bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-md flex items-center justify-center transition-colors">
+          <span>Agregar al Carrito</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

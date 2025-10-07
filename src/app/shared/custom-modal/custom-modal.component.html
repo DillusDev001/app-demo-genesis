@@ -1,0 +1,55 @@
+<div class="fixed inset-0 z-40 flex items-center justify-center bg-black/50 backdrop-filter backdrop-blur-sm shadow-lg" [hidden]="!isOpen">
+
+  <!-- Contenedor del Modal -->
+  <div class="relative bg-white rounded-lg shadow-lg w-max mx-4 sm:mx-0">
+
+    <!-- Botón de Cerrar (general para ambos tipos de modal) -->
+    <button (click)="onResponse(false)" class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 transition-colors duration-300 z-10">
+      <i class="fa-solid fa-times fa-lg"></i>
+    </button>
+
+    <!-- ============================================= -->
+    <!-- =========== Modal de Componente =========== -->
+    <!-- ============================================= -->
+    <div *ngIf="isDynamicComponent" class="p-6">
+      <ng-container #dynamicComponentContainer></ng-container>
+    </div>
+
+    <!-- ============================================= -->
+    <!-- ======== Modal de Alerta/Confirmación ======== -->
+    <!-- ============================================= -->
+    <div *ngIf="!isDynamicComponent" class="text-center p-6">
+      
+      <!-- Encabezado con Icono -->
+      <div class="mb-4">
+        <div [class]="getModalHeaderColor()" class="mx-auto flex items-center justify-center h-12 w-12 rounded-full">
+          <i [class]="getModalIcon()"></i>
+        </div>
+        <h3 class="text-lg leading-6 font-medium text-gray-900 mt-2">{{ title }}</h3>
+      </div>
+
+      <!-- Contenido del Mensaje -->
+      <div class="mt-2 px-4 text-sm text-gray-500">
+        <p>{{ content }}</p>
+      </div>
+
+      <!-- Botones de Acción -->
+      <div class="mt-6 flex justify-end gap-3">
+        <button 
+          (click)="onResponse(false)" 
+          type="button" 
+          class="py-2 px-4 bg-white border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-300">
+          Cancelar
+        </button>
+        <button 
+          (click)="onResponse(true)" 
+          type="button" 
+          [class]="getModalButtonColor()" 
+          class="py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 transition-all duration-300">
+          {{ buttonText }}
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>

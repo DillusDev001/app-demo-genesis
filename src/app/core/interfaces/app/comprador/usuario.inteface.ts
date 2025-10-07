@@ -3,7 +3,7 @@ import { Producto } from "../vendedor/vendedor.interface";
 import { Pago } from "./pago.interface";
 
 export interface Usuario {
-    idUsuario: number;
+    idUsuario: string;
     email: string;
     password: string;
     nombre: string;
@@ -14,7 +14,7 @@ export interface Usuario {
 
 export function defaultUsuario(): Usuario {
     return {
-        idUsuario: 0,
+        idUsuario: "",
         email: "",
         password: "",
         nombre: "",
@@ -23,7 +23,8 @@ export function defaultUsuario(): Usuario {
 }
 
 export interface Direccion {
-    idDireccion: number;
+    idUsuario: string;
+    idDireccion: string;
     calle: string;
     ciudad: string;
     departamento: string;
@@ -35,7 +36,8 @@ export interface Direccion {
 
 export function defaultDireccion(): Direccion {
     return {
-        idDireccion: 0,
+        idUsuario: "",
+        idDireccion: "",
         calle: "",
         ciudad: "",
         departamento: "",
@@ -48,21 +50,27 @@ export function defaultDireccion(): Direccion {
 
 // ______________________ ______________________ //
 export interface Carrito {
-    idUsuario: number;
+    idUsuario: string;
     detalle: DetalleCarrito[];
+    subtotal: number;
+    envio: number;
+    descuento: number;
     total: number;
 }
 
 export function defaultCarrito(): Carrito {
     return {
-        idUsuario: 0,
+        idUsuario: "",
         detalle: [],
+        subtotal: 0,
+        envio: 0,
+        descuento: 0,
         total: 0
     };
 }
 
 export interface DetalleCarrito {
-    idProducto: number;
+    idProducto: string;
     sec: number,
     idVendedor: number;
     cantidad: number;
@@ -75,7 +83,7 @@ export interface DetalleCarrito {
 
 export function defaultDetalleCarrito(): DetalleCarrito {
     return {
-        idProducto: 0,
+        idProducto: "",
         sec: 0,
         idVendedor: 0,
         cantidad: 0,
@@ -87,7 +95,7 @@ export function defaultDetalleCarrito(): DetalleCarrito {
 
 // ______________________ ______________________ //
 export interface Pedido {
-    idPedido: number;
+    idPedido: string;
     idUsuario: number;
     fecha: string;
     estado: "pendiente" | "pagado" | "enviado" | "entregado"; // | "cancelado"
@@ -105,7 +113,7 @@ export interface Pedido {
 
 export function defaultPedido(): Pedido {
     return {
-        idPedido: 0,
+        idPedido: "",
         idUsuario: 0,
         fecha: "",
         estado: "pendiente",
@@ -119,10 +127,10 @@ export function defaultPedido(): Pedido {
 }
 
 export interface DetallePedido {
-    idPedido: number;
-    idProducto: number;
+    idPedido: string;
+    idProducto: string;
     sec: number,
-    idVendedor: number;
+    idVendedor: string;
     cantidad: number;
     precioUnitario: number;
     subtotal: number;
@@ -138,10 +146,10 @@ export interface DetallePedido {
 
 export function defaultDetallePedido(): DetallePedido {
     return {
-        idPedido: 0,
-        idProducto: 0,
+        idPedido: "",
+        idProducto: "",
         sec: 0,
-        idVendedor: 0,
+        idVendedor: "",
         cantidad: 0,
         precioUnitario: 0,
         subtotal: 0,

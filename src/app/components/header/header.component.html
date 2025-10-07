@@ -1,0 +1,48 @@
+<header class="bg-white shadow w-full">
+    <div class="w-full flex gap-4 px-6 py-5 items-center">
+        <!-- Logo -->
+        <div class="text-2xl font-bold">
+            <a routerLink="/">MarketPlace</a>
+        </div>
+
+        <!-- Menu de Navegación -->
+        <nav *ngIf="dataLocalStorage.type !== 'vendedor'" class="flex items-center space-x-4 text-lg">
+            <a routerLink="/" routerLinkActive="text-blue-700 font-bold" [routerLinkActiveOptions]="{exact: true}"
+                class=" hover:">Inicio</a>
+            <a routerLink="/categoria" routerLinkActive="text-blue-700 font-bold" class=" hover:">Categorías</a>
+            <a routerLink="/ofertas" routerLinkActive="text-blue-700 font-bold" class=" hover:">Ofertas</a>
+            <a routerLink="/ayuda" routerLinkActive="text-blue-700 font-bold" class=" hover:">Ayuda</a>
+        </nav>
+
+        <div class="grow"></div>
+
+        <!-- Barra de Búsqueda -->
+        <div *ngIf="dataLocalStorage.type !== 'vendedor'" class="">
+            <input type="text" placeholder="Buscar productos..."
+                class="w-full px-4 py-2 border rounded-lg outline-none ">
+        </div>
+
+        <!-- Iconos de Navegación -->
+        <nav class="flex gap-4 items-center">
+            <!-- Icono de Usuario -->
+            <a *ngIf="dataLocalStorage.type !== 'vendedor'" class="flex justify-center items-center border-2 rounded-full p-1 w-8 h-8 cursor-pointer"
+                (click)="onClickUsuario()">
+                <i class="fa-solid fa-user fa-lg"></i>
+            </a>
+
+            <!-- Icono de Carrito -->
+            <a *ngIf="dataLocalStorage.type !== 'vendedor'" routerLink="/cart" class="relative  hover:">
+                <i class="fa-solid fa-cart-shopping fa-lg "></i>
+                <span
+                    class="absolute -top-4 -right-3 bg-[var(--color-primary)] text-white rounded-full text-xs w-5 h-5 flex items-center justify-center">5</span>
+            </a>
+
+            <button *ngIf="userLogeado"
+                class="w-max bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline transition-colors cursor-pointer"
+                (click)="onClickLogout()">
+                Salir
+            </button>
+        </nav>
+
+    </div>
+</header>

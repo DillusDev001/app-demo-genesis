@@ -1,90 +1,123 @@
 export interface Vendedor {
-    idVendedor: number;
-    nombre: string;
-    logo: string;
-    descripcion: string;
-    email: string;
-    whatsapp: string;
-    comision: number; // %
-    qrPagos: string; // pago de productos vendidos
-    banco: string;
-    nroCuenta: string;
-    beneficiario: string;
+  idVendedor: string;
+  nombre: string; // Nombre de la PYME
+  logo: string;
+  descripcion: string;
+  email: string;
+  password: string;
+  whatsapp: string;
+  comision: number; // %
+  qrPagos: string; // pago de productos vendidos
+  banco: string;
+  nroCuenta: string;
+  beneficiario: string;
+  rubro: string;
 
-    productos?: Producto[];
+  productos?: Producto[];
 }
 
 export function defaultVendedor(): Vendedor {
-    return {
-        idVendedor: 0,
-        nombre: "",
-        logo: "",
-        descripcion: "",
-        email: "",
-        whatsapp: "",
-        comision: 0,
-        qrPagos: "",
-        banco: "",
-        nroCuenta: "",
-        beneficiario: ""
-    };
+  return {
+      idVendedor: "",
+      nombre: "", // Nombre de la PYME
+      logo: "",
+      descripcion: "",
+      email: "",
+      password: "",
+      whatsapp: "",
+      comision: 0,
+      qrPagos: "",
+      banco: "",
+      nroCuenta: "",
+      beneficiario: "",
+      rubro: ""
+  };
 }
 
 // ______________________ ______________________ //
 export interface Producto {
-    idProducto: number;
-    nombre: string;
-    descripcion: string;
-    precio: number;
-    idVendedor: number;
-    categoria: string;
-    stock: number;
-    imagenDestacada: string; // principal para mostrar en cards
-    atributos: AtributoProducto[];
+  idProducto: string;             // Mejor UUID o string
+  idVendedor: string;             // Relación con el vendedor
 
-    imagenes?: string[];   // array de URLs
+  nombre: string;
+  descripcion: string;
+  precio: number;
+
+  categoria: string;              // Ej: "Ropa", "Electrodomésticos", "Educación"
+  subCategoria?: string;          // Ej: "Poleras", "Refrigeradores", "Cursos online"
+
+  tipo: "producto" | "servicio";  // Diferencia entre tangible o servicio
+  stock?: number;                 // Solo aplica a productos físicos
+
+  imagenDestacada: string;        // Imagen principal para cards
+  imagenes?: string[];            // Galería de imágenes
+  atributos?: AtributoProducto[]; // Campos dinámicos (ej: talla, color, duración)
+
+  activo: boolean;                // Controla si se muestra en la tienda
+
+  puntuacion?:number;
+  resenias?: number;
+
+  vendedor?: Vendedor;
+
+  fechaCreacion?: Date;
+  fechaActualizacion?: Date;
 }
 
 export interface AtributoProducto {
-    nombre: "color" | "talla" | "tamaño" | "";
-    valor: string;
+  nombre:
+  | "color"
+  | "talla"
+  | "tamaño"
+  | "peso"
+  | "material"
+  | "marca"
+  | "modelo"
+  | "dimensiones"
+  | "capacidad"
+  | "sabor"
+  | "fragancia"
+  | "duracion"
+  | "garantia"
+  | "otros";   // fallback para casos especiales
+  valor: string;
 }
 
 export function defaultProducto(): Producto {
-    return {
-        idProducto: 0,
-        nombre: "",
-        descripcion: "",
-        precio: 0,
-        idVendedor: 0,
-        categoria: "",
-        stock: 0,
-        imagenDestacada: "",
-        atributos: []
-    }
+  return {
+      idProducto: "",
+      idVendedor: "",
+      nombre: "",
+      descripcion: "",
+      precio: 0,
+      categoria: "",
+      tipo: "producto",
+      imagenDestacada: "",
+      activo: false
+  }
 }
 
 // ______________________ ______________________ //
 export interface Resenia {
-    idResenia: number;
-    idUsuario: number;
-    idProducto: number;
-    idVendedor: number;
-    puntuacion: number;   // 1 a 5
-    comentario: string;
-    fecha: string;
+  idResenia: string;
+  idUsuario: string;
+  idProducto: string;
+  idVendedor: string;
+  puntuacion: number;   // 1 a 5
+  comentario: string;
+  fecha: string;
 }
 
 export function defaultResenia(): Resenia {
-    return {
-        idResenia: 0,
-        idUsuario: 0,
-        idProducto: 0,
-        idVendedor: 0,
-        puntuacion: 0,
-        comentario: "",
-        fecha: ""
-    };
+  return {
+      idResenia: "",
+      idUsuario: "",
+      idProducto: "",
+      idVendedor: "",
+      puntuacion: 0,
+      comentario: "",
+      fecha: ""
+  };
 }
 
 

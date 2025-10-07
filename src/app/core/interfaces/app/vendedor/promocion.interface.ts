@@ -1,5 +1,5 @@
 export interface PaquetePromocion {
-    idPaquete: number;
+    idPaquete: string;
     nombre: string; // Básico, Premium, Gold
     descripcion: string;
     lugar: "banner" | "destacado" | "sidebar" | "home" | "categoria"; // agregar ideas
@@ -16,7 +16,7 @@ export interface DuracionOpcion {
 
 export function defaultPaquetePromocion(): PaquetePromocion {
     return {
-        idPaquete: 0,
+        idPaquete: "",
         nombre: "",
         descripcion: "",
         lugar: "banner",
@@ -29,11 +29,11 @@ export function defaultPaquetePromocion(): PaquetePromocion {
 // ______________________ ______________________ //
 
 export interface Promocion {
-    idPromocion: number;
-    idPaquete: number;
-    idVendedor: number;
-    idProducto: number;
-    idPago: number;
+    idPromocion: string;
+    idPaquete: string;
+    idVendedor: string;
+    idProducto: string;
+    idPago: string;
     diasContratados: number;
     precioTotal: number;
     fechaInicio: string;
@@ -51,11 +51,11 @@ export interface Promocion {
 
 export function defaultPromocion(): Promocion {
     return {
-        idPromocion: 0,
-        idPaquete: 0,
-        idVendedor: 0,
-        idProducto: 0,
-        idPago: 0,
+        idPromocion: "",
+        idPaquete: "",
+        idVendedor: "",
+        idProducto: "",
+        idPago: "",
         diasContratados: 0,
         precioTotal: 0,
         fechaInicio: "",

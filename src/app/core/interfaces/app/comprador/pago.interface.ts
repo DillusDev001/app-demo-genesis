@@ -1,5 +1,5 @@
 export interface Pago {
-    idPago: number,
+    idPago: string,
     metodo: "qr" | "tarjeta" | "transferencia" | "depósito";
     referencia: string;
     monto: number,
@@ -8,7 +8,7 @@ export interface Pago {
 
 export function defaultPago(): Pago {
     return {
-        idPago: 0,
+        idPago: "",
         metodo: "qr",
         referencia: "",
         monto: 0,

@@ -1,0 +1,30 @@
+<div class="flex flex-col bg-white rounded-lg shadow-md overflow-hidden h-full" (click)="openProductDetail()">
+  <div class="w-full h-48 flex items-center justify-center text-gray-300">
+    <img [src]="producto.imagenDestacada" alt="{{ producto.nombre }}" class="w-full h-full object-cover"
+      *ngIf="producto.imagenDestacada else noImage">
+    <ng-template #noImage>
+      <i class="fas fa-headphones-alt fa-5x"></i>
+    </ng-template>
+  </div>
+
+  <div class="flex flex-col p-2 justify-end h-full">
+    <h3 class="text-lg font-bold text-gray-800">{{ producto.nombre }}</h3>
+    <p class="text-gray-600">Bs. {{ producto.precio }}</p>
+
+    <div class="flex items-center mt-2">
+      <ng-container *ngFor="let i of [1, 2, 3, 4, 5]">
+        <i *ngIf="producto.puntuacion! >= i" class="fas fa-star text-yellow-500"></i>
+        <i *ngIf="producto.puntuacion! >= i - 0.5 && producto.puntuacion! < i"
+          class="fas fa-star-half-alt text-yellow-500"></i>
+        <i *ngIf="producto.puntuacion! < i - 0.5" class="far fa-star text-gray-400"></i>
+      </ng-container>
+      <span class="ml-2 text-gray-600">{{ producto.puntuacion! > 0 ? producto.puntuacion!.toFixed(1) : 'Sin reseñas'
+        }}</span>
+    </div>
+
+    <button (click)="agregarAlCarrito(); $event.stopPropagation()"
+      class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4 w-full cursor-pointer">
+      Añadir al carrito
+    </button>
+  </div>
+</div>

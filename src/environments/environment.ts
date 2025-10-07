@@ -1,4 +1,5 @@
 export const environment = {
+    secretKey: 'Mudanzas*123',
     production: true,
     firebaseConfig: {
         apiKey: "AIzaSyDJPQqLv50MAcf4AYe_LTNVDtTpIGCAhdQ",
@@ -25,6 +26,7 @@ export const environment = {
         resenia: "resenia",
 
         transaccion: "transaccion",
+        categoria: "categoria",
 
         paquetepromocion: "paquetepromocion",
 

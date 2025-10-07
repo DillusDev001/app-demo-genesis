@@ -1,0 +1,78 @@
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">Carrito de Compras</h1>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+    <!-- Columna de Items del Carrito -->
+    <div class="lg:col-span-2">
+      <div class="space-y-4">
+
+        <!-- Ejemplo de Item 1 -->
+        <div *ngFor="let item of carrito.detalle; index as index"
+          class="flex items-center bg-white border border-gray-200 px-4 py-8 rounded-lg shadow-lg">
+          <img class="w-20 h-20 object-cover rounded-md mr-4" [src]="item.imagen" [alt]="item.idProducto">
+          <div class="flex-grow">
+            <h2 class="font-semibold text-gray-800">{{ item.producto?.nombre }}</h2>
+            <p class="text-sm text-gray-500">Vendido por: {{ item.producto?.vendedor }}</p>
+            <p class="font-bold text-blue-600 mt-1">{{ item.producto?.precio| currency:'Bs. ':'symbol':'1.2-2' }}</p>
+          </div>
+          <div class="flex flex-col items-end">
+            <div class="flex items-center border border-gray-200 rounded-md">
+              <button (click)="decrementQuantity(index)"
+                class="px-3 py-1 text-gray-600 hover:bg-gray-100 rounded-l-md">-</button>
+              <span class="px-4 py-1 border-l border-r">{{ item.cantidad }}</span>
+              <button (click)="incrementQuantity(index)"
+                class="px-3 py-1 text-gray-600 hover:bg-gray-100 rounded-r-md">+</button>
+            </div>
+            <button (click)="removeItem(index)"
+              class="text-sm text-gray-500 hover:text-red-600 mt-2">Eliminar</button>
+          </div>
+        </div>
+
+        <!-- Mensaje de Carrito Vacío -->
+        <div *ngIf="carrito.detalle.length === 0" class="text-center py-12 bg-white rounded-lg shadow-sm">
+          <i class="fa-solid fa-carrito-shopping fa-3x text-gray-300 mb-4"></i>
+          <h2 class="text-xl font-semibold text-gray-700">Tu carrito está vacío</h2>
+          <p class="text-gray-500 mt-2">Parece que aún no has añadido nada. ¡Explora nuestros productos!</p>
+          <a routerLink="/"
+            class="mt-4 inline-block bg-blue-600 text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors">Ir
+            a la tienda</a>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Columna de Resumen del Pedido -->
+    <div class="lg:col-span-1">
+      <div class="bg-white border border-gray-200 p-8 rounded-lg shadow-lg sticky top-8">
+        <h2 class="text-xl font-bold text-gray-900 mb-4">Resumen del Pedido</h2>
+        <div class="space-y-3">
+          <div class="flex justify-between text-gray-700">
+            <span>Subtotal</span>
+            <span>{{ carrito.subtotal | currency:'Bs. ':'symbol':'1.2-2' }}</span>
+          </div>
+          <div class="flex justify-between text-gray-700">
+            <span>Costo de Envío</span>
+            <span>{{ carrito.envio | currency:'Bs. ':'symbol':'1.2-2' }}</span>
+          </div>
+          <div class="flex justify-between text-gray-700">
+            <span>Impuestos (IVA 13%)</span>
+            <span>Bs. {{ taxes.toFixed(2) }}</span>
+          </div>
+        </div>
+        <div class="border-t border-gray-200 my-4"></div>
+        <div class="flex justify-between font-bold text-gray-900 text-lg">
+          <span>Total</span>
+          <span>{{ carrito.total | currency:'Bs. ':'symbol':'1.2-2' }}</span>
+        </div>
+        <button
+          class="w-full mt-6 bg-blue-600 text-white font-semibold py-3 rounded-lg hover:bg-blue-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+          [disabled]="carrito.detalle.length === 0">
+          Continuar con la compra
+        </button>
+        <p class="text-center text-xs text-gray-500 mt-3">Envíos a toda Bolivia. Seguro y confiable.</p>
+      </div>
+    </div>
+
+  </div>
+</div>

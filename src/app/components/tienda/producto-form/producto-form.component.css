@@ -1,0 +1,9 @@
+/* Estilos para el toggle switch */
+input:checked ~ .dot {
+  transform: translateX(100%);
+  background-color: #4f46e5; /* O el color que prefieras para el estado activo */
+}
+
+input:checked ~ .block {
+    background-color: #c7d2fe; /* Un color de fondo más claro para el estado activo */
+}

@@ -91,7 +91,7 @@ export class FirebaseGenesisService {
       result.data = set as T;
       result.success = true;
     } catch (error: any) {
-      console.log("createDoc: ", error.message);
+      console.log("createDoc: ", error);
       result.message = "Error al crear documento. " + error.message;
       result.error = error;
     }
@@ -141,7 +141,7 @@ export class FirebaseGenesisService {
   }
 
   /** ---------------------------------------- Multiple Create Doc Firebase ---------------------------------------- **/
-  async multipleCreate<T>(coleccion: string, data: any[]): Promise<ResultFirebase<T>> {
+  async multipleCreate<T>(coleccion: string, data: any[], idAtri: string): Promise<ResultFirebase<T>> {
     let result = defaultResultFirebase<T>();
 
     try {
@@ -150,7 +150,7 @@ export class FirebaseGenesisService {
 
       // Itera sobre el array de datos y agrega una operación "set" por cada elemento
       data.forEach(item => {
-        const docRef = doc(this.firestore, coleccion, item.id);
+        const docRef = doc(this.firestore, coleccion, item[idAtri]);
         batch.set(docRef, item);
       });
 
@@ -323,5 +323,10 @@ export class FirebaseGenesisService {
       result.error = error;
     }
     return result;
+  }
+
+  generateUUID(coleccion: string): string {
+    const docRef = doc(collection(this.firestore, coleccion));
+    return docRef.id;
   }
 }

@@ -1,0 +1,11 @@
+<div class="flex w-max lg:w-full h-full p-2 bg-gray-800 text-white">
+  <ul class="w-max lg:w-full space-y-2">
+    <li *ngFor="let item of menuItems" >
+      <a [routerLink]="item.route" routerLinkActive="bg-white text-gray-800"
+        class="h-12 flex gap-4 items-center justify-center sm:justify-start py-3 px-4 rounded-lg hover:bg-gray-100/25">
+        <i *ngIf="item.icon !== ''" [class]="item.icon"></i>
+        <p class="hidden sm:block">{{ item.label }}</p>
+      </a>
+    </li>
+  </ul>
+</div>

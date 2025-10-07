@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Type } from '@angular/core';
 import { Subject } from 'rxjs';
 import { ModalConfig } from '../../interfaces/ui/modal-config.interface';
 import { EmitterResponse } from '../../interfaces/emitter-response.interface';
@@ -8,26 +8,23 @@ import { EmitterResponse } from '../../interfaces/emitter-response.interface';
 })
 export class ModalService {
   private openModalSource = new Subject<ModalConfig>();
-  private responseSource = new Subject<any>();
+  private responseSource = new Subject<EmitterResponse>();
 
-  /** Observable para abrir el modal */
   openModal$ = this.openModalSource.asObservable();
-
-  /** Observable para recibir la respuesta */
   response$ = this.responseSource.asObservable();
 
-  /** Llamar al modal desde cualquier parte */
-  open(config: ModalConfig): Promise<EmitterResponse> {
-    this.openModalSource.next(config);
+  open(component: Type<any>, data?: any): Promise<EmitterResponse> {
+    this.openModalSource.next({ component, data });
+
     return new Promise(resolve => {
-      this.response$.subscribe(res => {
+      const subscription = this.response$.subscribe(res => {
+        subscription.unsubscribe();
         resolve(res);
       });
     });
   }
 
-  /** Enviar la respuesta desde el modal */
-  sendResponse(res: any) {
+  sendResponse(res: EmitterResponse) {
     this.responseSource.next(res);
   }
 }
