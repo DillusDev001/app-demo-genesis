@@ -6,6 +6,10 @@ import { ProductDetailComponent } from '../product-detail/product-detail.compone
 import { QueryConstraint, where } from '@angular/fire/firestore';
 import { FirebaseGenesisService } from '../../../core/services/firebase.genesis.service';
 import { environment } from '../../../../environments/environment';
+import { getLocalDataLogged } from '../../../core/utils/storage.utils';
+import { getCart, setCart } from '../../../core/utils/cart.utils';
+import { Carrito, DetalleCarrito } from '../../../core/interfaces/app/comprador/usuario.inteface';
+import { HeaderService } from '../../../core/services/header.service';
 
 @Component({
   selector: 'app-product-card',
@@ -20,7 +24,8 @@ export class ProductCardComponent implements OnInit {
 
   constructor(
     private modalService: ModalService,
-    private firebaseGenesisService: FirebaseGenesisService
+    private firebaseGenesisService: FirebaseGenesisService,
+    private headerService: HeaderService // Inyectar HeaderService
   ) { }
 
   async ngOnInit() {
@@ -54,7 +59,37 @@ export class ProductCardComponent implements OnInit {
   }
 
   agregarAlCarrito() {
-    this.addToCart.emit(this.producto);
+    const cart: Carrito = getCart();
+
+    const itemIndex = cart.detalle.findIndex(item => item.idProducto === this.producto.idProducto);
+
+    if (itemIndex > -1) {
+      // El producto ya está en el carrito, se incrementa la cantidad
+      cart.detalle[itemIndex].cantidad++;
+      cart.detalle[itemIndex].subtotal = cart.detalle[itemIndex].cantidad * cart.detalle[itemIndex].precioUnitario;
+    } else {
+      // El producto no está en el carrito, se agrega
+      const nuevoDetalle: DetalleCarrito = {
+        idProducto: this.producto.idProducto,
+        sec: 0, // Puedes ajustar esto si es necesario
+        idVendedor: this.producto.idVendedor,
+        cantidad: 1,
+        precioUnitario: this.producto.precio,
+        subtotal: this.producto.precio,
+        imagen: this.producto.imagenDestacada,
+        producto: this.producto
+      };
+      cart.detalle.push(nuevoDetalle);
+    }
+
+    // Recalcular totales del carrito
+    cart.subtotal = cart.detalle.reduce((sum, item) => sum + item.subtotal, 0);
+    cart.total = cart.subtotal; // Asumiendo que no hay envío ni descuento por ahora
+
+    setCart(cart);
+
+    // Actualizar el contador del carrito en el header
+    this.headerService.triggerAction('refreshCart');
   }
 
   openProductDetail() {

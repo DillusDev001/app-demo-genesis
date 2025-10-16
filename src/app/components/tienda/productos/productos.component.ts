@@ -7,14 +7,14 @@ import { FirebaseGenesisService } from '../../../core/services/firebase.genesis.
 import { QueryConstraint, where } from '@angular/fire/firestore';
 import { environment } from '../../../../environments/environment';
 import { NotificationService } from '../../../core/services/ui/notification.service';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-productos',
   templateUrl: './productos.component.html',
   styleUrls: ['./productos.component.css'],
   standalone: true,
-  imports: [CommonModule]
+  imports: [CommonModule, RouterLink]
 })
 export class ProductosComponent {
   vendedor: Vendedor = defaultVendedor();
@@ -35,7 +35,7 @@ export class ProductosComponent {
 
   async getProductosVendedor() {
     const queryConstraint: QueryConstraint[] = [];
-    queryConstraint.push(where('vendedorId', '==', this.vendedor.idVendedor));
+    queryConstraint.push(where('idVendedor', '==', this.vendedor.idVendedor));
 
     const result = await this.firebaseGenesisService.busquedaQuery(environment.collection.producto, queryConstraint);
 

@@ -17,6 +17,7 @@ export class CustomModalComponent implements OnInit, OnDestroy {
   @ViewChild('dynamicComponentContainer', { read: ViewContainerRef }) dynamicComponentContainer!: ViewContainerRef;
   private componentRef!: ComponentRef<any>;
   private modalSubscription!: Subscription;
+  private closeSubscription!: Subscription;
 
   isOpen: boolean = false;
 
@@ -49,11 +50,18 @@ export class CustomModalComponent implements OnInit, OnDestroy {
         this.value = config.value || null;
       }
     });
+
+    this.closeSubscription = this.modalService.close$.subscribe(() => {
+      this.onResponse(false);
+    });
   }
 
   ngOnDestroy() {
     if (this.modalSubscription) {
       this.modalSubscription.unsubscribe();
+    }
+    if (this.closeSubscription) {
+      this.closeSubscription.unsubscribe();
     }
     this.destroyDynamicComponent();
   }

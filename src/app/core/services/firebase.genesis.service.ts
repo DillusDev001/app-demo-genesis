@@ -174,22 +174,22 @@ export class FirebaseGenesisService {
    * @param path ->/profile/participantes/id.jpg
    * @returns 
    */
-  async upLoadFile<T>(upLoadFile: File, path: string,): Promise<ResultFirebase<T>> {
+  async upLoadFile<T>(file: FileArrayObj): Promise<ResultFirebase<T>> {
     let result = defaultResultFirebase<T>();
 
     // validar si es null
-    if (!upLoadFile) {
+    if (!file.file) {
       result.message = "El archivo no es válido (null o undefined).";
       return result;
     }
 
     try {
-      const metadata: any = { contentType: upLoadFile.type };
+      const metadata: any = { contentType: file.file.type };
 
-      console.log("File type: ", upLoadFile.type)
+      console.log("File type: ", file.file.type)
       const storage = getStorage();
-      const storageRef = ref(storage, path);
-      const uploadTask = await uploadBytesResumable(storageRef, upLoadFile, metadata);
+      const storageRef = ref(storage, file.path);
+      const uploadTask = await uploadBytesResumable(storageRef, file.file, metadata);
       const downloadURL = await getDownloadURL(uploadTask.ref);
 
       result.success = true;
@@ -220,14 +220,14 @@ export class FirebaseGenesisService {
       const storage = getStorage();
 
       // 2. Crear el array de promesas usando tu estructura
-      const uploadPromises = filesToUpload.map(item => {
+      const uploadPromises = filesToUpload.map(async item => {
         // Usamos el "path" que viene en cada objeto
         const storageRef = ref(storage, item.path);
         const metadata = { contentType: item.file.type };
 
         // La lógica de subida y obtención de URL es la misma
-        return uploadBytesResumable(storageRef, item.file, metadata)
-          .then(uploadTask => getDownloadURL(uploadTask.ref));
+        const uploadTask = await uploadBytesResumable(storageRef, item.file, metadata);
+        return await getDownloadURL(uploadTask.ref);
       });
 
       // 3. Esperar a que todas las subidas se completen

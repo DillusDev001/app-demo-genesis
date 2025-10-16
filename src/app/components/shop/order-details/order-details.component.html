@@ -2,37 +2,36 @@
     <div class="container mx-auto px-4 py-8">
       <div class="flex flex-col lg:flex-row gap-8">
   
-        <!-- Columna de Items del Carrito -->
+        <!-- Columna de Detalles del Pedido -->
         <div class="lg:w-2/3">
           <div class="bg-white rounded-lg shadow-md p-6 mb-6">
-            <h2 class="text-2xl font-bold border-b pb-4 mb-4">Mi Carrito ({{ carrito.detalle?.length || 0 }} items)</h2>
+            <h2 class="text-2xl font-bold border-b pb-4 mb-4">Detalles del Pedido</h2>
             
-            <!-- Mensaje de Carrito Vacío -->
-            <div *ngIf="!carrito.detalle || carrito.detalle.length === 0" class="text-center py-12">
-              <p class="text-gray-500 text-lg mb-4">Tu carrito está vacío.</p>
-              <a routerLink="/" class="bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg hover:bg-blue-700 transition-colors">Comienza a Comprar</a>
-            </div>
-  
             <!-- Lista de Items -->
-            <div *ngIf="carrito.detalle && carrito.detalle.length > 0">
+            <div>
               <div *ngFor="let item of carrito.detalle; let i = index" class="flex items-center justify-between border-b py-4">
                 <div class="flex items-center">
                   <img [src]="item.imagen" [alt]="item.producto?.nombre" class="w-20 h-20 object-cover rounded-md mr-6">
                   <div>
                     <p class="font-semibold text-gray-800">{{ item.producto?.nombre || 'Nombre no disponible' }}</p>
                     <p class="text-sm text-gray-600">Vendido por: {{ item.producto?.vendedor?.nombre || 'Desconocido' }}</p>
-                    <button (click)="removeItem(i)" class="text-red-500 hover:text-red-700 text-sm font-semibold mt-1">Eliminar</button>
                   </div>
                 </div>
                 <div class="flex items-center">
-                  <div class="flex items-center border border-gray-300 rounded-md">
-                    <button (click)="decrementQuantity(i)" class="px-3 py-1 text-gray-600 hover:bg-gray-200 rounded-l-md">-</button>
                     <span class="px-4 py-1">{{ item.cantidad }}</span>
-                    <button (click)="incrementQuantity(i)" class="px-3 py-1 text-gray-600 hover:bg-gray-200 rounded-r-md">+</button>
-                  </div>
                   <p class="font-bold text-lg text-gray-800 w-24 text-right">{{ item.subtotal | currency:'Bs.':'symbol':'1.2-2' }}</p>
                 </div>
               </div>
+            </div>
+          </div>
+
+          <!-- Dirección de Envío -->
+          <div class="bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-2xl font-bold border-b pb-4 mb-4">Dirección de Envío</h2>
+            <div *ngIf="direccion">
+                <p class="font-semibold text-gray-800">{{ direccion.calle }}</p>
+                <p class="text-sm text-gray-600">{{ direccion.ciudad }}, {{ direccion.departamento }}</p>
+                <p class="text-sm text-gray-600">{{ direccion.pais }} - {{ direccion.codigoPostal }}</p>
             </div>
           </div>
         </div>
@@ -63,14 +62,9 @@
             </div>
             
             <button 
-              (click)="proceedToCheckout()"
-              [disabled]="!carrito.detalle || carrito.detalle.length === 0"
-              [ngClass]="{
-                'bg-blue-600 hover:bg-blue-700 text-white': carrito.detalle && carrito.detalle.length > 0,
-                'bg-gray-400 cursor-not-allowed text-gray-200': !carrito.detalle || carrito.detalle.length === 0
-              }"
-              class="w-full font-semibold py-3 rounded-lg transition-colors">
-              Proceder al Pago
+              (click)="confirmOrder()"
+              class="w-full font-semibold py-3 rounded-lg transition-colors bg-blue-600 hover:bg-blue-700 text-white">
+              Confirmar Pedido
             </button>
   
           </div>
@@ -78,3 +72,10 @@
       </div>
     </div>
   </div>
+
+<app-qr-payment 
+    *ngIf="showQrPayment" 
+    [qrCodeUrl]="'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=Example'" 
+    [amount]="carrito.total" 
+    (paymentConfirmed)="handlePaymentConfirmation()">
+</app-qr-payment>

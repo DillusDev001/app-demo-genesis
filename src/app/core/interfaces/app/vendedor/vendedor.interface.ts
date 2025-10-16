@@ -18,19 +18,19 @@ export interface Vendedor {
 
 export function defaultVendedor(): Vendedor {
   return {
-      idVendedor: "",
-      nombre: "", // Nombre de la PYME
-      logo: "",
-      descripcion: "",
-      email: "",
-      password: "",
-      whatsapp: "",
-      comision: 0,
-      qrPagos: "",
-      banco: "",
-      nroCuenta: "",
-      beneficiario: "",
-      rubro: ""
+    idVendedor: "",
+    nombre: "", // Nombre de la PYME
+    logo: "",
+    descripcion: "",
+    email: "",
+    password: "",
+    whatsapp: "",
+    comision: 0,
+    qrPagos: "",
+    banco: "",
+    nroCuenta: "",
+    beneficiario: "",
+    rubro: ""
   };
 }
 
@@ -51,49 +51,39 @@ export interface Producto {
 
   imagenDestacada: string;        // Imagen principal para cards
   imagenes?: string[];            // Galería de imágenes
-  atributos?: AtributoProducto[]; // Campos dinámicos (ej: talla, color, duración)
+  atributos: AtributoProducto[]; // Campos dinámicos (ej: talla, color, duración)
 
   activo: boolean;                // Controla si se muestra en la tienda
 
-  puntuacion?:number;
+  puntuacion?: number;
   resenias?: number;
 
-  vendedor?: Vendedor;
+  vendedor: Vendedor;
 
   fechaCreacion?: Date;
   fechaActualizacion?: Date;
 }
 
 export interface AtributoProducto {
-  nombre:
-  | "color"
-  | "talla"
-  | "tamaño"
-  | "peso"
-  | "material"
-  | "marca"
-  | "modelo"
-  | "dimensiones"
-  | "capacidad"
-  | "sabor"
-  | "fragancia"
-  | "duracion"
-  | "garantia"
-  | "otros";   // fallback para casos especiales
+  nombre: | "color" | "talla" | "tamaño" | "peso" | "material"
+  | "marca" | "modelo" | "dimensiones" | "capacidad" | "sabor" | "fragancia"
+  | "duracion" | "garantia" | "otros";   // fallback para casos especiales
   valor: string;
 }
 
 export function defaultProducto(): Producto {
   return {
-      idProducto: "",
-      idVendedor: "",
-      nombre: "",
-      descripcion: "",
-      precio: 0,
-      categoria: "",
-      tipo: "producto",
-      imagenDestacada: "",
-      activo: false
+    idProducto: "",
+    idVendedor: "",
+    nombre: "",
+    descripcion: "",
+    precio: 0,
+    categoria: "",
+    tipo: "producto",
+    imagenDestacada: "",
+    atributos: [],
+    activo: false,
+    vendedor: defaultVendedor()
   }
 }
 
@@ -110,13 +100,13 @@ export interface Resenia {
 
 export function defaultResenia(): Resenia {
   return {
-      idResenia: "",
-      idUsuario: "",
-      idProducto: "",
-      idVendedor: "",
-      puntuacion: 0,
-      comentario: "",
-      fecha: ""
+    idResenia: "",
+    idUsuario: "",
+    idProducto: "",
+    idVendedor: "",
+    puntuacion: 0,
+    comentario: "",
+    fecha: ""
   };
 }
 

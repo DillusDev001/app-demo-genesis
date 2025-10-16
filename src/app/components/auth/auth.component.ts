@@ -74,7 +74,7 @@ export class AuthComponent {
 
     if (this.isLoginMode) {
       const result = await this.authService.signInWithEmailAndPassword(email, password);
-      console.log('login' ,result, this.userType)
+      
 
       if (result.success && result.data) {
         const user = result.data;
@@ -144,7 +144,7 @@ export class AuthComponent {
   /*____________________________________ Usuario ____________________________________  */
   async crearUsuarioFirebase(_usuario: Usuario) {
     const create = await this.firebaseGenesisService.createDocWithID(environment.collection.usuario, _usuario.idUsuario, _usuario);
-    console.log('resultCreate',create)
+    
     if (create.success) {
       this.getUsuarioFirebase(_usuario.idUsuario);
     } else {
@@ -154,10 +154,10 @@ export class AuthComponent {
 
   async getUsuarioFirebase(uid: string) {
     const result = await this.firebaseGenesisService.findDocByField(environment.collection.usuario, 'idUsuario', uid);
-    console.log('resultGet',result)
+    
     if (result.success && result.data) {
       const usuario = result.data as Usuario;
-      console.log(usuario)
+      
       this.agregarSesionUsuario(usuario);
     } else {
       this.errorMessage = result.message;
@@ -192,7 +192,7 @@ export class AuthComponent {
 
   async getVendedorFirebase(uid: string) {
     const result = await this.firebaseGenesisService.findDocByField(environment.collection.vendedor, 'idVendedor', uid);
-    console.log('find',result)
+    
     if (result.success && result.data) {
       const vendedor = result.data as Vendedor;
       this.agregarSesionVendedor(vendedor);

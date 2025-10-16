@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../core/services/auth.service';
@@ -6,8 +6,10 @@ import { Subscription } from 'rxjs';
 import { deleteLocalStorageData, getLocalDataLogged } from '../../core/utils/storage.utils';
 import { HeaderService } from '../../core/services/header.service';
 import { DataLocalStorage, defaultDataLocalStorage } from '../../core/interfaces/local/data-local-storage';
-import { defaultUsuario, Usuario } from '../../core/interfaces/app/comprador/usuario.inteface';
+import { Carrito, defaultCarrito, defaultUsuario, Usuario } from '../../core/interfaces/app/comprador/usuario.inteface';
 import { Vendedor } from '../../core/interfaces/app/vendedor/vendedor.interface';
+import { getCart, setCart } from '../../core/utils/cart.utils';
+import { FirebaseGenesisService } from '../../core/services/firebase.genesis.service';
 
 @Component({
   selector: 'app-header',
@@ -17,12 +19,14 @@ import { Vendedor } from '../../core/interfaces/app/vendedor/vendedor.interface'
   styleUrl: './header.component.css'
 })
 export class HeaderComponent implements OnInit, OnDestroy {
-  //isLoggedIn = false;
   private authSubscription!: Subscription;
   private headerSubscription!: Subscription;
 
+  private firebaseGenesisService = inject(FirebaseGenesisService);
+
   dataLocalStorage: DataLocalStorage = defaultDataLocalStorage();
   userLogeado!: Usuario | Vendedor | null;
+  cartItemCount: number = 0;
 
   constructor(
     private router: Router,
@@ -31,15 +35,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    this.setDataLocalStorage();
+    this.setDataAndCart();
 
     this.authSubscription = this.authService.isLoggedIn().subscribe(status => {
-      //this.isLoggedIn = status;
+      // Potentially refresh data on auth status change
     });
 
     this.headerSubscription = this.headerService.headerAction$.subscribe(action => {
-      if (action === 'refreshUser') {
-        this.setDataLocalStorage();
+      if (action === 'refreshUser' || action === 'refreshCart') {
+        this.setDataAndCart();
       }
     });
   }
@@ -47,15 +51,26 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     if (this.authSubscription) {
       this.authSubscription.unsubscribe();
+    }
+    if (this.headerSubscription) {
       this.headerSubscription.unsubscribe();
     }
   }
 
-  setDataLocalStorage() {
+  async setDataAndCart() {
     this.dataLocalStorage = getLocalDataLogged();
     this.userLogeado = this.dataLocalStorage.usuario ? this.dataLocalStorage.usuario : this.dataLocalStorage.vendedor;
-  }
 
+    let cart: Carrito;
+
+    if (this.dataLocalStorage.type !== 'vendedor') {
+      cart = getCart();
+      this.cartItemCount = cart.detalle.reduce((total, item) => total + item.cantidad, 0);
+    } else {
+      setCart(defaultCarrito())
+      this.cartItemCount = 0;
+    }
+  }
 
   onClickUsuario() {
     if (this.dataLocalStorage.type !== '') {
@@ -69,8 +84,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     const result = await this.authService.signOut();
     if (result.success) {
       deleteLocalStorageData();
-      this.dataLocalStorage = defaultDataLocalStorage();
-      this.userLogeado = null;
+      this.setDataAndCart(); // Refresca los datos del usuario y el carrito
       this.router.navigateByUrl('/');
     } else {
       console.log('Logout failed');

@@ -1,7 +1,9 @@
 <div class="container mx-auto p-8">
   <h1 class="text-2xl font-bold mb-6">Agregar Producto</h1>
 
-  <form [formGroup]="productoForm" (ngSubmit)="guardarProducto()">
+  <p *ngIf="isLoading" class="text-center text-gray-500">Guardando</p>
+
+  <form *ngIf="!isLoading" [formGroup]="productoForm" (ngSubmit)="guardarProducto()">
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
       <div class="md:col-span-2">
         <!-- Sección de detalles del producto -->
@@ -59,12 +61,12 @@
             <span class="block text-sm font-medium text-gray-700 mb-2">Tipo</span>
             <div class="flex gap-4">
               <label class="flex items-center p-3 border border-blue-500 bg-blue-50 rounded-md cursor-pointer flex-1">
-                <input type="radio" name="product-type" value="producto" formControlName="tipo"
+                <input type="radio" name="tipo" value="producto" formControlName="tipo"
                   class="h-4 w-4 text-blue-600 border-gray-300" checked>
                 <span class="ml-3 text-sm font-medium text-blue-800">Producto</span>
               </label>
               <label class="flex items-center p-3 border border-gray-300 rounded-md cursor-pointer flex-1">
-                <input type="radio" name="product-type" value="servicio" formControlName="tipo"
+                <input type="radio" name="tipo" value="servicio" formControlName="tipo"
                   class="h-4 w-4 text-blue-600 border-gray-300">
                 <span class="ml-3 text-sm font-medium text-gray-700">Servicio</span>
               </label>
@@ -80,7 +82,7 @@
           <div class="mb-6">
             <label class="block text-sm font-medium text-gray-700 mb-2">Imagen Destacada</label>
             <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
-              <div class="space-y-1 text-center">
+              <div *ngIf="!imagenDestacadaPreview" class="space-y-1 text-center">
                 <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48"
                   aria-hidden="true">
                   <path
@@ -97,16 +99,36 @@
                 </div>
                 <p class="text-xs text-gray-500">SVG, PNG, JPG (MAX. 800x400px)</p>
               </div>
+              <div *ngIf="imagenDestacadaPreview" class="space-y-1 text-center">
+                <img [src]="imagenDestacadaPreview" class="mx-auto h-48 w-auto">
+                <div class="flex text-sm text-gray-600">
+                  <label for="file-upload"
+                    class="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none">
+                    <span (click)="inputFile.click()">Cambiar imagen</span>
+                    <input #inputFile hidden type="file" (change)="onImagenDestacadaSelected($event)">
+                  </label>
+                </div>
+              </div>
             </div>
           </div>
 
           <!-- Lista de Imagenes -->
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-2">Galería de Imágenes</label>
-            <div class="grid grid-cols-4 gap-4">
-              <div
-                class="flex items-center justify-center w-24 h-24 bg-gray-100 rounded-lg cursor-pointer hover:bg-gray-200">
+            <div class="flex flex-wrap gap-4">
+              <div *ngFor="let preview of galeriaPreviews; let i = index" class="relative group w-24 h-24 rounded-lg overflow-hidden">
+                <img [src]="preview" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                  <button type="button" (click)="eliminarImagenGaleria(i)" class="text-white">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              <div (click)="galeriaInput.click()" class="flex items-center justify-center w-24 h-24 bg-gray-100 rounded-lg cursor-pointer hover:bg-gray-200">
                 <span class="text-3xl text-gray-400">+</span>
+                <input #galeriaInput hidden type="file" (change)="onGaleriaImageSelected($event)" multiple>
               </div>
             </div>
           </div>
@@ -118,26 +140,13 @@
         <!-- Atributos del producto -->
         <div class="bg-white p-6 rounded-lg shadow-md mb-8">
           <h2 class="text-lg font-semibold mb-4">Atributos del Producto</h2>
-          <div class="space-y-4">
-            <div class="flex items-center gap-2">
-              <input type="text" placeholder="Ej: Talla"
+          <div formArrayName="atributos">
+            <div *ngFor="let atributo of atributos.controls; let i=index" [formGroupName]="i" class="flex items-center gap-2 mb-4">
+              <input type="text" formControlName="nombre" placeholder="Ej: Talla"
                 class="h-10 w-full rounded px-4 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-              <input type="text" placeholder="Ej: S, M, L"
+              <input type="text" formControlName="valor" placeholder="Ej: S, M, L"
                 class="h-10 w-full rounded px-4 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-              <button class="text-gray-500 hover:text-red-500">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                  stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                </svg>
-              </button>
-            </div>
-            <div class="flex items-center gap-2">
-              <input type="text" placeholder="Ej: Color"
-                class="h-10 w-full rounded px-4 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-              <input type="text" placeholder="Ej: Rojo, Azul, Verde"
-                class="h-10 w-full rounded px-4 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-              <button class="text-gray-500 hover:text-red-500">
+              <button type="button" (click)="eliminarAtributo(i)" class="text-gray-500 hover:text-red-500">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                   stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -146,7 +155,7 @@
               </button>
             </div>
           </div>
-          <button class="mt-4 text-sm text-blue-600 hover:text-blue-800 font-medium flex items-center">
+          <button type="button" (click)="agregarAtributo()" class="mt-4 text-sm text-blue-600 hover:text-blue-800 font-medium flex items-center">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24"
               stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -174,10 +183,8 @@
 
     <!-- Acciones -->
     <div class="flex justify-end gap-4 mt-8">
-      <button type="button"
-        class="px-6 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">Cancelar</button>
-      <button type="submit"
-        class="px-6 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700">Guardar
+      <button type="button" class="px-6 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">Cancelar</button>
+      <button type="submit" class="px-6 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700">Guardar
         Producto</button>
     </div>
   </form>

@@ -9,9 +9,11 @@ import { EmitterResponse } from '../../interfaces/emitter-response.interface';
 export class ModalService {
   private openModalSource = new Subject<ModalConfig>();
   private responseSource = new Subject<EmitterResponse>();
+  private closeSource = new Subject<void>();
 
   openModal$ = this.openModalSource.asObservable();
   response$ = this.responseSource.asObservable();
+  close$ = this.closeSource.asObservable();
 
   open(component: Type<any>, data?: any): Promise<EmitterResponse> {
     this.openModalSource.next({ component, data });
@@ -26,5 +28,9 @@ export class ModalService {
 
   sendResponse(res: EmitterResponse) {
     this.responseSource.next(res);
+  }
+
+  close() {
+    this.closeSource.next();
   }
 }

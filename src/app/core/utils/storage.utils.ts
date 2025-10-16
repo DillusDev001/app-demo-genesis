@@ -1,3 +1,4 @@
+
 import { DataLocalStorage, defaultDataLocalStorage } from "../interfaces/local/data-local-storage";
 import { EncryptionService } from "../services/encryption.service";
 
@@ -5,8 +6,6 @@ const userLoggedItem = 'userLogged';
 const boxRecordar = 'boxRecordar';
 const emailLogin = 'emailLogin';
 const passLogin = 'passLogin';
-
-//const encryptionService: EncryptionService = new EncryptionService
 
 function isBrowser(): boolean {
   return typeof window !== 'undefined' && typeof sessionStorage !== 'undefined' && typeof localStorage !== 'undefined';
@@ -28,11 +27,9 @@ export function getLocalDataLogged(): DataLocalStorage {
 
     if (encryptedData) {
       try {
-        // Descifrar y luego parsear el string JSON resultante
         const decryptedString = encryptionService.decrypt(encryptedData);
         return JSON.parse(decryptedString) as DataLocalStorage;
       } catch (error) {
-        // Manejar errores de descifrado o JSON.parse
         console.error("Error al obtener o descifrar los datos de la sesión:", error);
         return defaultDataLocalStorage();
       }
@@ -54,7 +51,7 @@ export function setLocalDataLogged(data: DataLocalStorage): void {
 export function deleteLocalStorageData(): void {
   if (isBrowser()) {
     sessionStorage.removeItem(userLoggedItem);
-    sessionStorage.clear();
+    sessionStorage.clear(); // Esto también elimina `selectedAddress`, lo cual es correcto al hacer logout.
   }
 }
 

@@ -25,16 +25,18 @@
         <!-- Iconos de Navegación -->
         <nav class="flex gap-4 items-center">
             <!-- Icono de Usuario -->
-            <a *ngIf="dataLocalStorage.type !== 'vendedor'" class="flex justify-center items-center border-2 rounded-full p-1 w-8 h-8 cursor-pointer"
+            <a *ngIf="dataLocalStorage.type !== 'vendedor'"
+                class="flex justify-center items-center border-2 rounded-full p-1 w-8 h-8 cursor-pointer"
                 (click)="onClickUsuario()">
                 <i class="fa-solid fa-user fa-lg"></i>
             </a>
 
             <!-- Icono de Carrito -->
-            <a *ngIf="dataLocalStorage.type !== 'vendedor'" routerLink="/cart" class="relative  hover:">
+            <a *ngIf="dataLocalStorage.type !== 'vendedor'" routerLink="/shop/cart" class="relative  hover:">
                 <i class="fa-solid fa-cart-shopping fa-lg "></i>
-                <span
-                    class="absolute -top-4 -right-3 bg-[var(--color-primary)] text-white rounded-full text-xs w-5 h-5 flex items-center justify-center">5</span>
+                <span *ngIf="cartItemCount > 0"
+                    class="absolute -top-4 -right-3 bg-[var(--color-primary)] text-white rounded-full text-xs w-5 h-5 flex items-center justify-center">{{
+                    cartItemCount }}</span>
             </a>
 
             <button *ngIf="userLogeado"

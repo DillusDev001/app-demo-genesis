@@ -61,7 +61,7 @@ export interface Carrito {
 export function defaultCarrito(): Carrito {
     return {
         idUsuario: "",
-        detalle: [],
+        detalle: [] as DetalleCarrito[],
         subtotal: 0,
         envio: 0,
         descuento: 0,
@@ -72,7 +72,7 @@ export function defaultCarrito(): Carrito {
 export interface DetalleCarrito {
     idProducto: string;
     sec: number,
-    idVendedor: number;
+    idVendedor: string;
     cantidad: number;
     precioUnitario: number;
     subtotal: number;
@@ -85,7 +85,7 @@ export function defaultDetalleCarrito(): DetalleCarrito {
     return {
         idProducto: "",
         sec: 0,
-        idVendedor: 0,
+        idVendedor: "",
         cantidad: 0,
         precioUnitario: 0,
         subtotal: 0,

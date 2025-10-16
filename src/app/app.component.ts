@@ -5,6 +5,8 @@ import { FooterComponent } from './components/footer/footer.component';
 import { CustomNotificationComponent } from './shared/custom-notification/custom-notification.component';
 import { CustomModalComponent } from './shared/custom-modal/custom-modal.component';
 import { getLocalDataLogged } from './core/utils/storage.utils';
+import { existCart, getCart, setCart } from './core/utils/cart.utils';
+import { defaultCarrito } from './core/interfaces/app/comprador/usuario.inteface';
 
 @Component({
   selector: 'app-root',
@@ -19,13 +21,19 @@ export class AppComponent implements OnInit {
   private router = inject(Router);
 
   ngOnInit(): void {
+    const data = getLocalDataLogged();
 
-
-    const dat = getLocalDataLogged();
-
-    if(dat.vendedor){
-      this.router.navigateByUrl('/tienda')
+    if (data.vendedor) {
+      this.router.navigateByUrl('/tienda');
+    } else {
+      if (!existCart()) {
+        setCart(defaultCarrito());
+      } else {
+        if (data.usuario?.idUsuario !== getCart().idUsuario)
+          setCart(defaultCarrito());
+        else
+          console.log('existe carrito similar al usuario logeado: ', getCart())
+      }
     }
-    
   }
 }

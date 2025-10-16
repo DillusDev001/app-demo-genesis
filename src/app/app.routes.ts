@@ -8,6 +8,7 @@ import { AddressesComponent } from './components/account/addresses/addresses.com
 import { OrdersComponent } from './components/account/orders/orders.component';
 import { PaymentMethodsComponent } from './components/account/payment-methods/payment-methods.component';
 import { CartComponent } from './components/shop/cart/cart.component';
+import { OrderDetailsComponent } from './components/shop/order-details/order-details.component';
 import { CategoryProductsComponent } from './components/category/category-products/category-products.component';
 import { CategoryComponent } from './components/category/category.component';
 import { TiendaComponent } from './components/tienda/tienda.component';
@@ -20,7 +21,19 @@ import { ProductoFormComponent } from './components/tienda/producto-form/product
 export const routes: Routes = [
     { path: '', component: HomeComponent, title: 'Index' },
     { path: 'auth', component: AuthComponent, title: 'Autenticación' },
-    { path: 'cart', component: CartComponent, title: 'Carrito de Compras' },
+    
+    // Grupo de rutas para el proceso de compra
+    {
+        path: 'shop', 
+        children: [
+            { path: 'cart', component: CartComponent, title: 'Carrito de Compras' },
+            { path: 'order-details', component: OrderDetailsComponent, title: 'Detalles del Pedido' } // Nueva ruta
+        ]
+    },
+
+    // Antigua ruta de carrito (redirigir o eliminar si se prefiere)
+    { path: 'cart', redirectTo: '/shop/cart', pathMatch: 'full' },
+
     {
         path: 'categoria',
         children: [
