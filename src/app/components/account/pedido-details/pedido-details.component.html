@@ -1,0 +1,130 @@
+<div class="bg-gray-100 min-h-screen" *ngIf="!isLoading">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Encabezado del Pedido -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+            <div class="flex flex-col sm:flex-row justify-between sm:items-center border-b pb-4 mb-4">
+                <h2 class="text-2xl font-bold mb-2 sm:mb-0">Detalles del Pedido</h2>
+                <span class="text-sm font-semibold text-gray-600">Pedido #{{ pedido!.idPedido }}</span>
+            </div>
+            <div class="flex flex-col sm:flex-row justify-between text-sm">
+                <div class="mb-4 sm:mb-0">
+                    <p class="text-gray-600"><strong>Fecha del pedido:</strong> {{ pedido!.fecha }}
+                    </p>
+                    <div class="flex items-center mt-2">
+                        <p class="text-gray-600 mr-2"><strong>Estado:</strong></p>
+                        <!-- Chip para el estado general del pedido -->
+                        <span class="px-3 py-1 text-xs font-semibold rounded-full" [ngClass]="{
+                                'bg-yellow-100 text-yellow-800': pedido!.estado === 'pendiente',
+                                'bg-green-100 text-green-800': pedido!.estado === 'pagado',
+                                'bg-blue-100 text-blue-800': pedido!.estado === 'enviado',
+                                'bg-gray-100 text-gray-800': pedido!.estado === 'entregado'
+                              }">
+                            {{ pedido!.estado | titlecase }}
+                        </span>
+                    </div>
+                </div>
+                <div class="text-left sm:text-right">
+                    <p class="text-gray-600"><strong>Total del pedido:</strong></p>
+                    <p class="font-bold text-2xl">{{ pedido!.total | currency:'Bs.':'symbol':'1.2-2' }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex flex-col lg:flex-row gap-8">
+            <!-- Columna Izquierda: Artículos y Envío -->
+            <div class="lg:w-2/3">
+                <!-- Lista de Artículos -->
+                <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+                    <h3 class="text-xl font-bold border-b pb-4 mb-4">Artículos del Pedido</h3>
+                    <div class="space-y-4">
+                        <div *ngFor="let item of detallePedido"
+                            class="flex flex-col sm:flex-row items-start sm:items-center justify-between border-b py-4 last:border-b-0">
+                            <div class="flex items-center mb-4 sm:mb-0">
+                                <img [src]="item.imagen" [alt]="item.producto!.nombre"
+                                    class="w-20 h-20 object-cover rounded-md mr-6">
+                                <div>
+                                    <p class="font-semibold text-gray-800">{{ item.producto!.nombre || 'Nombre no
+                                        disponible' }}</p>
+                                    <p class="text-sm text-gray-600">Vendido por: {{ item.producto!.vendedor!.nombre ||
+                                        'Desconocido' }}</p>
+                                    <p class="text-sm text-gray-500 mt-1">Cantidad: {{ item.cantidad }}</p>
+                                </div>
+                            </div>
+                            <div class="flex flex-col items-start sm:items-end w-full sm:w-auto">
+                                <p class="font-bold text-lg text-gray-800">{{ item.subtotal |
+                                    currency:'Bs.':'symbol':'1.2-2' }}</p>
+                                <p class="text-sm text-gray-500 -mt-1">{{ item.precioUnitario |
+                                    currency:'Bs.':'symbol':'1.2-2' }} c/u</p>
+                                <!-- Chip para el estado del artículo -->
+                                <span *ngIf="item.estado" class="mt-2 px-3 py-1 text-xs font-semibold rounded-full"
+                                    [ngClass]="{
+                                        'bg-yellow-100 text-yellow-800': getLatestItemStatus(item) === 'pendiente',
+                                        'bg-blue-100 text-blue-800': getLatestItemStatus(item) === 'enviado',
+                                        'bg-green-100 text-green-800': getLatestItemStatus(item) === 'entregado'
+                                      }">
+                                    {{ getLatestItemStatus(item) | titlecase }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Información de Envío -->
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h3 class="text-xl font-bold border-b pb-4 mb-4">Información de Envío</h3>
+                    <div *ngIf="pedido!.direccion">
+                        <p class="font-semibold text-gray-800">{{ pedido.direccion!.calle }}</p>
+                        <p class="text-sm text-gray-600">{{ pedido.direccion!.ciudad }}, {{
+                            pedido.direccion!.departamento }}</p>
+                        <p class="text-sm text-gray-600">{{ pedido.direccion!.pais }} - {{
+                            pedido.direccion!.codigoPostal }}</p>
+                    </div>
+                    <div *ngIf="!pedido!.direccion">
+                        <p class="text-gray-500">No se ha especificado una dirección de envío.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Columna Derecha: Resumen del Pedido -->
+            <div class="lg:w-1/3">
+                <div class="bg-white rounded-lg shadow-md p-6 sticky top-8">
+                    <h3 class="text-xl font-bold border-b pb-4 mb-4">Resumen del Pedido</h3>
+                    <div class="space-y-2 border-b pb-4 mb-4">
+                        <div class="flex justify-between">
+                            <p class="text-gray-600">Subtotal</p>
+                            <p class="font-semibold">{{ pedido!.subtotal | currency:'Bs.':'symbol':'1.2-2' }}</p>
+                        </div>
+                        <div class="flex justify-between text-red-600">
+                            <p>Descuento</p>
+                            <p class="font-semibold">- {{ pedido!.descuento | currency:'Bs.':'symbol':'1.2-2' }}</p>
+                        </div>
+                        <div class="flex justify-between">
+                            <p class="text-gray-600">Envío</p>
+                            <p class="font-semibold">{{ pedido.envio > 0 ? (pedido.envio |
+                                currency:'Bs.':'symbol':'1.2-2') : 'Gratis' }}</p>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center font-bold text-xl">
+                        <p>Total</p>
+                        <p>{{ pedido!.total | currency:'Bs.':'symbol':'1.2-2' }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Pantalla de Carga -->
+<div *ngIf="isLoading" class="flex items-center justify-center h-screen">
+    <div class="text-center">
+        <!-- Puedes usar un spinner o cualquier otro indicador de carga -->
+        <svg class="animate-spin h-10 w-10 text-blue-600 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none"
+            viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+            </path>
+        </svg>
+        <p class="mt-4 text-lg font-semibold text-gray-700">Cargando detalles del pedido...</p>
+    </div>
+</div>

@@ -7,6 +7,8 @@ import { CustomModalComponent } from './shared/custom-modal/custom-modal.compone
 import { getLocalDataLogged } from './core/utils/storage.utils';
 import { existCart, getCart, setCart } from './core/utils/cart.utils';
 import { defaultCarrito } from './core/interfaces/app/comprador/usuario.inteface';
+import { FirebaseGenesisService } from './core/services/firebase.genesis.service';
+import { environment } from '../environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -19,6 +21,7 @@ export class AppComponent implements OnInit {
   title = 'app-demo-genesis';
 
   private router = inject(Router);
+  private firebaseGenesisService = inject(FirebaseGenesisService);
 
   ngOnInit(): void {
     const data = getLocalDataLogged();
@@ -27,12 +30,16 @@ export class AppComponent implements OnInit {
       this.router.navigateByUrl('/tienda');
     } else {
       if (!existCart()) {
-        setCart(defaultCarrito());
+        setCart({
+          ...defaultCarrito(),
+          idCarrito: this.firebaseGenesisService.generateUUID(environment.collection.carrito)
+        });
       } else {
         if (data.usuario?.idUsuario !== getCart().idUsuario)
-          setCart(defaultCarrito());
-        else
-          console.log('existe carrito similar al usuario logeado: ', getCart())
+          setCart({
+            ...defaultCarrito(),
+            idCarrito: this.firebaseGenesisService.generateUUID(environment.collection.carrito)
+          });
       }
     }
   }

@@ -141,8 +141,10 @@ export class FirebaseGenesisService {
   }
 
   /** ---------------------------------------- Multiple Create Doc Firebase ---------------------------------------- **/
-  async multipleCreate<T>(coleccion: string, data: any[], idAtri: string): Promise<ResultFirebase<T>> {
+  async multipleCreate<T>(coleccion: string, data: any[], idAtri?: string): Promise<ResultFirebase<T>> {
     let result = defaultResultFirebase<T>();
+
+    const collectionRef = collection(this.firestore, coleccion); 
 
     try {
       // const collectionRef = collection(this.firestore, coleccion);
@@ -150,7 +152,12 @@ export class FirebaseGenesisService {
 
       // Itera sobre el array de datos y agrega una operación "set" por cada elemento
       data.forEach(item => {
-        const docRef = doc(this.firestore, coleccion, item[idAtri]);
+        let docRef;
+        if(idAtri){
+          docRef = doc(this.firestore, coleccion, item[idAtri]);
+        }else {
+          docRef = doc(collectionRef);
+        }
         batch.set(docRef, item);
       });
 
@@ -314,6 +321,32 @@ export class FirebaseGenesisService {
       if (!data.empty) {
         result.success = true;
         result.data = data.docs.map(doc => doc.data() as any) as T;
+      } else {
+        result.message = "No se encontraron coincidencias.";
+      }
+    } catch (error: any) {
+      console.log("busquedaMultiple: ", error);
+      result.message = "Error al obtener los datos. " + error.message;
+      result.error = error;
+    }
+    return result;
+  }
+
+  async busquedaQueryID<T>(coleccion: string, constraints: QueryConstraint[]): Promise<ResultFirebase<T>> {
+    let result = defaultResultFirebase<T>();
+    try {
+      const collectionRef = collection(this.firestore, coleccion);
+      const consulta = query(collectionRef, ...constraints);
+      const data = await getDocs(consulta);
+
+      if (!data.empty) {
+        result.success = true;
+        result.data = data.docs.map(doc => {
+          return{
+            id:doc.id,
+            ...doc.data()
+          }
+        }) as T;
       } else {
         result.message = "No se encontraron coincidencias.";
       }

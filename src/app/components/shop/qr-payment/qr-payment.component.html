@@ -1,31 +1,37 @@
-<div class="fixed inset-0 bg-gray-800/50 backdrop-filter backdrop-blur-sm flex items-center justify-center p-4 z-50">
-    <div class="bg-white rounded-2xl shadow-xl w-full max-w-sm mx-auto p-8 text-center">
-  
-      <h2 class="text-2xl font-bold mb-2 text-gray-800">Escanea para Pagar</h2>
-      <p class="text-gray-600 mb-6">Usa la cámara de tu celular para escanear el código QR y completar el pago.</p>
-  
-      <div class="mb-6">
-        <img [src]="qrCodeUrl" alt="Código QR de pago" class="w-48 h-48 mx-auto border-4 border-gray-200 rounded-lg">
-      </div>
-  
-      <div class="flex items-center justify-center space-x-4 mb-4">
-        <div class="bg-blue-100 text-blue-600 font-bold text-3xl rounded-lg px-4 py-2">{{ formatTime(minutes) }}</div>
-        <div class="text-gray-500 text-3xl">:</div>
-        <div class="bg-blue-100 text-blue-600 font-bold text-3xl rounded-lg px-4 py-2">{{ formatTime(seconds) }}</div>
-      </div>
-      <div class="flex justify-center space-x-12 mb-6 text-sm text-gray-500">
-        <span>Minutos</span>
-        <span>Segundos</span>
-      </div>
-  
-      <p class="text-xs text-gray-500 mb-8">El código QR expirará cuando el tiempo llegue a cero.</p>
-  
-      <button 
-        (click)="confirmPayment()" 
-        class="w-full bg-blue-600 text-white font-semibold py-3 rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
-        He Realizado el Pago
-      </button>
-  
+<div class="fixed inset-0 bg-gray-800/50 backdrop-filter backdrop-blur-sm flex items-center justify-center p-4 z-40">
+
+  <app-skeleton-qr-payment *ngIf="isLoading"></app-skeleton-qr-payment>
+
+  <div *ngIf="!isLoading" class="bg-white rounded-2xl shadow-xl w-full max-w-sm mx-auto p-8 text-center">
+
+    <h2 class="text-2xl font-bold mb-2 text-gray-800">Escanea para Pagar</h2>
+    <p class="text-gray-600 mb-6">Usa la cámara de tu celular para escanear el código QR y completar el pago.</p>
+
+    <div class="mb-6">
+      <img [src]="qrCodeUrl" alt="Código QR de pago" class="w-48 h-48 mx-auto border-4 border-gray-200 rounded-lg">
     </div>
+
+    <div class="flex items-center justify-center space-x-4 mb-4">
+      <div class="bg-blue-100 text-blue-600 font-bold text-3xl rounded-lg px-4 py-2">{{ formatTime(minutes) }}</div>
+      <div class="text-gray-500 text-3xl">:</div>
+      <div class="bg-blue-100 text-blue-600 font-bold text-3xl rounded-lg px-4 py-2">{{ formatTime(seconds) }}</div>
+    </div>
+    <div class="flex justify-center space-x-12 mb-6 text-sm text-gray-500">
+      <span>Minutos</span>
+      <span>Segundos</span>
+    </div>
+
+    <p class="text-xs text-gray-500 mb-8">El código QR expirará cuando el tiempo llegue a cero.</p>
+
+    <button (click)="confirmPayment()"
+      class="w-full bg-blue-600 text-white font-semibold py-3 rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
+      He Realizado el Pago
+    </button>
+
+    <button (click)="cancelPayment()"
+      class="mt-8 w-full bg-gray-600 text-white font-semibold py-3 rounded-lg hover:bg-gray-700 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50">
+      Cancelar
+    </button>
+
   </div>
-  
+</div>

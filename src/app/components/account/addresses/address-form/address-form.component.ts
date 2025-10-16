@@ -59,7 +59,7 @@ export class AddressFormComponent implements OnInit {
 
     this.mapOptions = {
       center: { lat: -16.5216256, lng: -68.1705472 }, // Default center
-      zoom: 8,
+      zoom: 15,
       streetViewControl: false,
       mapTypeControl: false,
     };
@@ -113,7 +113,16 @@ export class AddressFormComponent implements OnInit {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          this.updateLocation(position.coords.latitude, position.coords.longitude, position.coords.accuracy);
+          const userLocation = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          };
+          this.updateLocation(userLocation.lat, userLocation.lng, position.coords.accuracy);
+          this.mapOptions = { // Create a new object to trigger change detection
+            ...this.mapOptions,
+            center: userLocation,
+            zoom: 15
+          };
           //this.notificationService.notify('success', '¡Ubicación encontrada y seleccionada!');
         },
         (error) => {

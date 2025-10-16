@@ -28,11 +28,14 @@ export const environment = {
         transaccion: "transaccion",
         categoria: "categoria",
 
-        paquetepromocion: "paquetepromocion",
+        paquete: "paquete",
 
         promocion: "promocion",
 
         pago: "pago",
 
+    },
+    key: {
+        map: 'AIzaSyCBcfswf97RRyw_ICtn8mN1QKDvBeBjzQ4'
     }
 };

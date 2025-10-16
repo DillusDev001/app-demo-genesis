@@ -1,5 +1,5 @@
 
-import { Producto } from "../vendedor/vendedor.interface";
+import { defaultProducto, Producto, Vendedor } from "../vendedor/vendedor.interface";
 import { Pago } from "./pago.interface";
 
 export interface Usuario {
@@ -50,6 +50,7 @@ export function defaultDireccion(): Direccion {
 
 // ______________________ ______________________ //
 export interface Carrito {
+    idCarrito: string;
     idUsuario: string;
     detalle: DetalleCarrito[];
     subtotal: number;
@@ -60,6 +61,7 @@ export interface Carrito {
 
 export function defaultCarrito(): Carrito {
     return {
+        idCarrito: "",
         idUsuario: "",
         detalle: [] as DetalleCarrito[],
         subtotal: 0,
@@ -78,7 +80,7 @@ export interface DetalleCarrito {
     subtotal: number;
     imagen: string;
 
-    producto?: Producto;
+    producto: Producto;
 }
 
 export function defaultDetalleCarrito(): DetalleCarrito {
@@ -89,44 +91,50 @@ export function defaultDetalleCarrito(): DetalleCarrito {
         cantidad: 0,
         precioUnitario: 0,
         subtotal: 0,
-        imagen: ""
+        imagen: "",
+
+        producto: defaultProducto()
     };
 }
 
 // ______________________ ______________________ //
 export interface Pedido {
     idPedido: string;
-    idUsuario: number;
+    idUsuario: string;
     fecha: string;
     estado: "pendiente" | "pagado" | "enviado" | "entregado"; // | "cancelado"
     subtotal: number,
+    envio: number,
     descuento: number,
     total: number;
     codDescuento: string,
-    idDireccion: number,
-    idPago: number,
+    idDireccion: string,
+    idPago: string,
 
-    direccion?: Direccion;
-    pago?: Pago;
-    detalle?: DetallePedido[];
+    direccion?: Direccion | null;
+    pago?: Pago | null;
+    detalle?: DetallePedido[] | null;
 }
 
 export function defaultPedido(): Pedido {
     return {
         idPedido: "",
-        idUsuario: 0,
+        idUsuario: "",
         fecha: "",
         estado: "pendiente",
         subtotal: 0,
+        envio: 0,
         descuento: 0,
         total: 0,
         codDescuento: "",
-        idDireccion: 0,
-        idPago: 0
+        idDireccion: "",
+        idPago: ""
     };
 }
 
 export interface DetallePedido {
+    id?: string;
+    
     idPedido: string;
     idProducto: string;
     sec: number,
@@ -136,12 +144,16 @@ export interface DetallePedido {
     subtotal: number;
     imagen: string;
     estado: {
-        pendiente: "",
-        enviado: "",
-        entregado: ""
+        pendiente: string,
+        enviado: string,
+        entregado: string
     };
+    fecha: string;
 
-    producto?: Producto;
+    producto: Producto;
+    usuario: Usuario;
+
+    direccion: Direccion;
 }
 
 export function defaultDetallePedido(): DetallePedido {
@@ -158,7 +170,12 @@ export function defaultDetallePedido(): DetallePedido {
             pendiente: "",
             enviado: "",
             entregado: ""
-        }
+        },
+        fecha: "",
+
+        producto: defaultProducto(),
+        usuario: defaultUsuario(),
+        direccion: defaultDireccion()
     };
 }
 

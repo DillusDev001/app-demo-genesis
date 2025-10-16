@@ -1,0 +1,51 @@
+
+<div *ngIf="direccion" class="fixed inset-0 bg-gray-800/50 overflow-y-auto h-full w-full flex items-center justify-center" id="my-modal">
+  <div class="relative mx-auto p-5 border w-full max-w-4xl shadow-lg rounded-md bg-white">
+    <div class="absolute top-0 right-0 pt-4 pr-4">
+      <button (click)="onClose()" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center">
+        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+      </button>
+    </div>
+    <div class="mt-3 text-center">
+      <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-blue-100 sm:mx-0 sm:h-10 sm:w-10">
+        <svg class="h-6 w-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+      </div>
+      <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">Detalles de la Dirección</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4  px-7 py-3">
+        <div class="w-full h-96">
+          <google-map [options]="mapOptions" height="100%" width="100%">
+            <map-marker *ngIf="markerPosition" [position]="markerPosition">
+            </map-marker>
+          </google-map>
+        </div>
+        <div class="flex flex-col gap-4 text-left">
+          <div>
+            <h4 class="font-bold">Calle:</h4>
+            <p>{{ direccion.calle }}</p>
+          </div>
+          <div>
+            <h4 class="font-bold">Ciudad:</h4>
+            <p>{{ direccion.ciudad }}</p>
+          </div>
+          <div>
+            <h4 class="font-bold">Departamento:</h4>
+            <p>{{ direccion.departamento }}</p>
+          </div>
+          <div>
+            <h4 class="font-bold">Código Postal:</h4>
+            <p>{{ direccion.codigoPostal }}</p>
+          </div>
+          <div class="col-span-2">
+            <h4 class="font-bold">País:</h4>
+            <p>{{ direccion.pais }}</p>
+          </div>
+        </div>
+      </div>
+      <div class="items-center px-4 py-3">
+        <button (click)="onClose()" id="ok-btn" class="px-4 py-2 bg-blue-500 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300">
+          Cerrar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

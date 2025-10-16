@@ -17,17 +17,18 @@ import { ProductosComponent } from './components/tienda/productos/productos.comp
 import { PedidosComponent } from './components/tienda/pedidos/pedidos.component';
 import { PromocionesComponent } from './components/tienda/promociones/promociones.component';
 import { ProductoFormComponent } from './components/tienda/producto-form/producto-form.component';
+import { PedidoDetailsComponent } from './components/account/pedido-details/pedido-details.component';
 
 export const routes: Routes = [
     { path: '', component: HomeComponent, title: 'Index' },
     { path: 'auth', component: AuthComponent, title: 'Autenticación' },
-    
+
     // Grupo de rutas para el proceso de compra
     {
-        path: 'shop', 
+        path: 'shop',
         children: [
             { path: 'cart', component: CartComponent, title: 'Carrito de Compras' },
-            { path: 'order-details', component: OrderDetailsComponent, title: 'Detalles del Pedido' } // Nueva ruta
+            { path: 'order-details', component: OrderDetailsComponent, title: 'Detalles del Pedido' }, // Nueva ruta
         ]
     },
 
@@ -69,6 +70,7 @@ export const routes: Routes = [
             { path: 'profile', component: ProfileComponent, title: 'Profile' },
             { path: 'addresses', component: AddressesComponent, title: 'Addresses' },
             { path: 'orders', component: OrdersComponent, title: 'Orders' },
+            { path: 'orders/order-details/:id', component: PedidoDetailsComponent, title: 'Detalles del Pedido' },
             { path: 'payment-methods', component: PaymentMethodsComponent, title: 'Payment Methods' },
             { path: '', redirectTo: 'profile', pathMatch: 'full' }
         ]

@@ -15,7 +15,7 @@ import { ModalService } from '../../../core/services/ui/modal.service';
 @Component({
   selector: 'app-carrito',
   standalone: true,
-  imports: [CommonModule, RouterModule, AddressSelectorComponent], 
+  imports: [CommonModule, RouterModule, AddressSelectorComponent],
   templateUrl: './cart.component.html',
   styleUrls: ['./cart.component.css']
 })
@@ -82,15 +82,15 @@ export class CartComponent implements OnInit {
       this.carrito = localCart;
       await this.createFirebaseCart(this.carrito);
     } else {
-      const newCart = defaultCarrito();
-      newCart.idUsuario = this.usuario.idUsuario;
-      this.carrito = newCart;
+
+      this.carrito = getCart();
+      this.carrito.idUsuario = this.usuario.idUsuario;
       await this.createFirebaseCart(this.carrito);
     }
   }
 
   async createFirebaseCart(cart: Carrito) {
-    const create = await this.firebaseGenesisService.createDoc(environment.collection.carrito, cart);
+    const create = await this.firebaseGenesisService.createDocWithID(environment.collection.carrito, cart.idCarrito, cart);
     if (create.success) {
       setCart(cart);
     } else {
@@ -140,7 +140,7 @@ export class CartComponent implements OnInit {
 
     if ((this.usuario && this.usuario.idUsuario) || forceFirebaseSave) {
       try {
-        await this.firebaseGenesisService.updateDoc(environment.collection.carrito, this.carrito, this.usuario.idUsuario);
+        await this.firebaseGenesisService.updateDoc(environment.collection.carrito, this.carrito, this.carrito.idCarrito);
         if (forceFirebaseSave) deleteCart();
       } catch (error) {
         console.error("Error updating cart in Firestore: ", error);
@@ -158,13 +158,12 @@ export class CartComponent implements OnInit {
 
     try {
       const response = await this.modalService.open(AddressSelectorComponent);
-      
+
       if (response && response.bool) { // Corregido
         this.router.navigate(['/shop/order-details']);
         this.modalService.close();
       } else {
         this.modalService.close();
-        console.log('Selección de dirección cancelada o cerrada.');
       }
     } catch (error) {
       this.modalService.close();

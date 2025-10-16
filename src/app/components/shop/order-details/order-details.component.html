@@ -77,5 +77,5 @@
     *ngIf="showQrPayment" 
     [qrCodeUrl]="'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=Example'" 
     [amount]="carrito.total" 
-    (paymentConfirmed)="handlePaymentConfirmation()">
+    (paymentConfirmed)="handlePaymentConfirmation($event)">
 </app-qr-payment>
